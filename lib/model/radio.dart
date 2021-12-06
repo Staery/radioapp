@@ -18,19 +18,21 @@ class MyRadioList {
 
   Map<String, dynamic> toMap() {
     return {
-      'radios': radios.map((x) => x.toMap()).toList(),
+      'radio s': radios.map((x) => x.toMap()).toList(),
     };
   }
 
   factory MyRadioList.fromMap(Map<String, dynamic> map) {
     return MyRadioList(
-      radios: List<MyRadio>.from(map['radios']?.map((x) => MyRadio.fromMap(x as Map<String, dynamic>)) as Iterable<dynamic>),
+      radios: List<MyRadio>.from(map['radios']?.map((x) 
+      => MyRadio.fromMap(x as Map<String, dynamic>)) as Iterable<dynamic>),
     );
   }
 
   String toJson() => json.encode(toMap());
 
-  factory MyRadioList.fromJson(String source) => MyRadioList.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory MyRadioList.fromJson(String source) 
+  => MyRadioList.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() => 'MyRadioList(radios: $radios)';
