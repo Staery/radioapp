@@ -6,7 +6,7 @@
                "tagline": "Шутки и песни",
                "color": "0xffa11431",
                "desc": "Радиостанция основу формата которой составляют программы юмористического содержания и русскоязычная поп-музыка. Ежедневная аудитория радиослушателей — 20-65 лет.",
-               "url": "http://live.humorfm.by:8000/veseloeradio;",
+               "url": "http://live.humorfm.by:8000/veseloeradio",
                "icon": "http://humorfm.by/media/cache/player_current/empty.png",
                "image": "https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b5df4c18876369.562d0d4bd94cf.jpg",
                "lang": "Russian",

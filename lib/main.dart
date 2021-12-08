@@ -4,15 +4,13 @@ import "package:google_fonts/google_fonts.dart";
 import "package:radioapp/pages/home_page.dart";
 
 void main() {
-
   SystemChrome.setSystemUIOverlayStyle(
-    const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
-  
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
