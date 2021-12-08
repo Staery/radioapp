@@ -1,4 +1,5 @@
 //import 'package:audioplayers/audioplayers.dart';
+import 'package:alan_voice/alan_voice.dart';
 import 'package:flutter/cupertino.dart';
 import "package:flutter/material.dart";
 import "package:flutter/services.dart";
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    setupAlan();
     fetchRadios();
 
     _audioPlayer.playerStateStream.listen((state) {
@@ -33,6 +35,12 @@ class _HomePageState extends State<HomePage> {
       }
       setState(() {});
     });
+  }
+
+  setupAlan() {
+    AlanVoice.addButton(
+        "14af2c8bee3d4b063d727f1d255fdbdd2e956eca572e1d8b807a3e2338fdd0dc/stage",
+        buttonAlign: AlanVoice.BUTTON_ALIGN_LEFT);
   }
 
   fetchRadios() async {
