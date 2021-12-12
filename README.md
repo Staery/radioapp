@@ -6,12 +6,12 @@ Radio project using flutter + dart with  Alan AI integration
 
 ## Use cases
 
-+ 1. User can scroll radio list
-+- 2. User can play different stations (don't work with http con.)
-+ 3. User can talk with Allen
-- 4. Aleln can execute commands
-- 5. Radio menu list
-- 6. Add more radio station...
+ 1. User can scroll radio list +
+ 2. User can play different stations (don't work with http con.) +-
+ 3. User can talk with Allen +
+ 4. Aleln can execute commands -
+ 5. Radio menu list -
+ 6. Add more radio station in progress...
 
 ## Structural requirements
 Client Side:
