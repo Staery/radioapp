@@ -9,8 +9,8 @@ Radio project using flutter + dart with  Alan AI integration
  1. User can scroll radio list +
  2. User can play different stations +
  3. User can talk with Allen +
- 4. Aleln can execute commands -
- 5. Radio menu list -
+ 4. Aleln can execute commands +
+ 5. Radio menu list +
  6. Add more radio station in progress...
 
 ## Structural requirements
