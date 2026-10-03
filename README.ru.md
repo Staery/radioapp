@@ -1,0 +1,202 @@
+<div align="center">
+
+<img src="docs/logo.png" width="96" alt="Логотип Radio" />
+
+# Radio
+
+**Интернет-радио с голосовым управлением на устройстве. Flutter-приложение для Android, iOS, Windows, macOS, Linux и веба.**
+
+[![CI](https://github.com/Staery/radioapp/actions/workflows/ci.yml/badge.svg)](https://github.com/Staery/radioapp/actions/workflows/ci.yml)
+![Flutter](https://img.shields.io/badge/Flutter-3.47-02569B?logo=flutter&logoColor=white)
+![Dart](https://img.shields.io/badge/Dart-3.13-0175C2?logo=dart&logoColor=white)
+![Platforms](https://img.shields.io/badge/platforms-Android%20·%20iOS%20·%20Windows%20·%20macOS%20·%20Linux%20·%20Web-6366F1)
+![Languages](https://img.shields.io/badge/i18n-EN%20·%20RU%20·%20BE-8B5CF6)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+
+[English](README.md) · **Русский**
+
+</div>
+
+---
+
+Radio играет живые станции из Минска и со всего мира. Листайте станции, нажимайте «Слушать» или просто скажите
+*«включи джаз»*, *«следующая»*, *«play jazz»* или *«уключы 96,2»*. Речь распознаётся на устройстве, а в команды её
+превращает небольшой разборщик: облачный ассистент, аккаунт и API-ключ не нужны. Интерфейс переведён на английский,
+русский и белорусский языки.
+
+## 📸 Скриншоты
+
+![Radio на английском, белорусском и русском](docs/screenshots/overview.png)
+
+<sub>Версия для Linux, слева направо: карусель станций (английский), воспроизведение и список станций (белорусский, русский), голосовая команда (белорусский).</sub>
+
+## ✨ Возможности
+
+| | |
+|---|---|
+| 📻 **Карусель станций** | Крупные карточки с частотой, жанром и городом; фон окрашивается в цвет выбранной станции |
+| 🎙 **Голосовое управление** | Включить, остановить, следующая, предыдущая, станция по частоте (*«96,2»*, *«96 и 2»*) или названию, жанр, *в избранное*. Фразы на английском, русском и белорусском |
+| ⌨️ **Команды текстом** | Те же команды можно ввести с клавиатуры, если микрофона нет или говорить неудобно |
+| 🌍 **Три языка** | Английский, русский, белорусский. Язык берётся из системы, переключается в приложении и запоминается. Описания станций тоже переведены |
+| ❤️ **Избранное и жанры** | Фильтры по каждому жанру и по избранному; избранное хранится на устройстве |
+| 🔎 **Список станций** | Поиск по названию, жанру, частоте, городу или описанию на любом из языков |
+| 🌙 **Таймер сна** | Остановит воспроизведение через 15–90 минут |
+| 📡 **Состояние эфира** | Подключение, эфир и ошибка; название текущего трека, если поток его передаёт; таймаут для потоков, которые так и не начали играть |
+| ⌨️ **Клавиатура** | Пробел включает и останавливает, ← → переключают станции на компьютере и в браузере |
+
+### Голосовые команды
+
+| Действие | English | Русский | Беларуская |
+|---|---|---|---|
+| Включить | play, start, resume | включи, играй, давай | уключы, грай |
+| Остановить | stop, pause, quiet | стоп, пауза, выключи | спыні, паўза, хопіць |
+| Следующая / предыдущая | next, skip / previous, back | следующая / предыдущая, назад | наступная / папярэдняя |
+| Станция | play 96.2, play Radio Paradise | включи 96,2, включи мелодии века | уключы 96 і 2 |
+| Жанр | play jazz, something calm | включи рок, что-нибудь спокойное | уключы рэтра |
+| Избранное | add to favourites | добавь в избранное | дадай у абранае |
+
+## 🖥 Платформы
+
+| Платформа | Звук | Распознавание речи | Сборка |
+|---|---|---|---|
+| Android | just_audio (ExoPlayer) | Android SpeechRecognizer | `flutter build apk` |
+| iOS | just_audio (AVPlayer) | Speech framework | `flutter build ios` (нужен Mac) |
+| Windows | just_audio_media_kit (libmpv) | распознавание Windows (SAPI) | `flutter build windows` |
+| macOS | just_audio (AVPlayer) | Speech framework | `flutter build macos` (нужен Mac) |
+| Linux | just_audio_media_kit (libmpv) | — только команды текстом | `flutter build linux` |
+| Веб | HTML audio | Web Speech API (Chrome, Edge) | `flutter build web` |
+
+## 🧱 Технологии
+
+| Область | Технологии |
+|---|---|
+| Фреймворк | Flutter 3.47, Dart 3.13, Material 3, собственная тёмная тема со шрифтом Inter |
+| Состояние | `provider` и контроллеры на `ChangeNotifier`; виджеты только читают состояние и вызывают методы |
+| Звук | `just_audio`, `audio_session`, `just_audio_media_kit` на Windows и Linux |
+| Голос | `speech_to_text` и собственный разборщик команд (`VoiceCommandParser`) |
+| Хранение | `shared_preferences` для избранного и языка |
+| Локализация | `flutter_localizations` и ARB-файлы (`gen-l10n`) для EN / RU / BE |
+| Тесты | `flutter_test`: модульные тесты разбора данных, контроллера и голосовых команд, виджет-тесты всех экранов и языков |
+| CI/CD | GitHub Actions: анализ и тесты, затем сборки под все шесть платформ; версии с тегом публикуются как релизы. `codemagic.yaml` собирает версии для Apple без своего Mac |
+
+## 🏗 Архитектура
+
+```mermaid
+flowchart LR
+    subgraph UI["Интерфейс (lib/ui)"]
+        H[HomePage<br/>StationCard · PlayerPanel]
+        SH[Окна: станции · голос · таймер сна · язык]
+    end
+
+    subgraph State["Состояние (lib/state)"]
+        RC[RadioController]
+        LC[LocaleController]
+    end
+
+    subgraph Services["Сервисы"]
+        P[RadioPlayer<br/>just_audio / media_kit]
+        V[VoiceInput<br/>speech_to_text]
+        VP[VoiceCommandParser]
+        R[StationRepository<br/>assets/stations.json]
+        F[FavoritesStore · LocaleStore<br/>shared_preferences]
+    end
+
+    H --> RC
+    SH --> RC
+    SH --> LC
+    SH --> V
+    SH --> VP --> RC
+    RC --> P
+    RC --> R
+    RC --> F
+    LC --> F
+```
+
+- **Платформенный код спрятан за интерфейсами.** У `RadioPlayer`, `VoiceInput`, `StationRepository`, `FavoritesStore`
+  и `LocaleStore` есть настоящие реализации и тестовые заглушки, поэтому контроллер и все экраны тестируются без
+  плагинов, микрофона и сети.
+- **Голос разбирается на устройстве.** `VoiceCommandParser` нормализует фразу (регистр, `ё`/`ў`, десятичные запятые,
+  знаки препинания), затем проверяет: стоп → навигация → избранное → станция (частота или название) → жанр →
+  «включи». Русские и белорусские слова хранятся как основы, поэтому подходят любые окончания.
+- **Контроллер возвращает данные, а не текст.** Голосовая команда возвращает `VoiceReply`, а интерфейс превращает его
+  в фразу на нужном языке. Ошибка хранится как станция, которая не включилась, а не как английский текст.
+- **Каталог станций — это данные.** В `assets/stations.json` лежат названия, частоты, цвета, адреса потоков и
+  переводы слоганов, описаний и городов. При загрузке файл проверяется: обязательные поля, адреса http(s),
+  уникальные идентификаторы.
+
+### Структура проекта
+
+```
+radioapp/
+├── lib/
+│   ├── main.dart · app.dart     # сборка зависимостей, тема, локализация
+│   ├── models/                  # Station, LocalizedText
+│   ├── data/                    # каталог станций, избранное
+│   ├── player/                  # RadioPlayer и реализация на just_audio
+│   ├── state/                   # RadioController, LocaleController
+│   ├── voice/                   # VoiceCommandParser, ввод речи
+│   ├── l10n/                    # app_en.arb, app_ru.arb, app_be.arb (+ сгенерированный код)
+│   └── ui/                      # главный экран, виджеты, нижние окна, тема
+├── assets/                      # stations.json, шрифт Inter (OFL)
+├── test/                        # модульные и виджет-тесты
+├── android/ ios/ windows/ macos/ linux/ web/
+├── scripts/build-windows-android.sh
+├── codemagic.yaml
+└── .github/workflows/ci.yml
+```
+
+## 🛠 Что изменилось по сравнению с версией 2021 года
+
+- **Alan AI заменён распознаванием на устройстве.** Плагин `alan_voice` не обновлялся с 2024 года, использует
+  `jcenter()` и Android Gradle Plugin 4 и не собирается с текущим Flutter. Кроме того, ему нужен облачный скрипт и
+  ключ проекта, который лежал прямо в репозитории. Теперь голос работает без ключа и сервера и на трёх языках.
+- **Команды работают как ожидается.** «Следующая» и «предыдущая» раньше только переставляли список и ничего не
+  включали, пункты бокового меню ничего не делали, а выбранная станция читалась до загрузки списка.
+- **Переход на Flutter 3 / Dart 3** с null safety, актуальными плагинами и пересозданными платформенными проектами;
+  `velocity_x` и загрузка Google Fonts во время работы больше не используются.
+- **Обновлён список станций.** Нерабочие потоки и случайные картинки заменены; минские станции остались.
+- **Новое:** версии для компьютера и веба, локализация, избранное, фильтры по жанрам, поиск, таймер сна, обработка
+  ошибок и таймаутов, горячие клавиши, тесты и CI.
+- `android/local.properties` с локальными путями больше не попадает в репозиторий.
+
+## 🚀 Быстрый старт
+
+Нужен [Flutter](https://docs.flutter.dev/get-started/install) 3.47 или новее. Инструменты платформ как обычно:
+Android Studio для Android, Visual Studio 2022 с *Desktop development with C++* для Windows, Xcode для iOS и macOS,
+а на Linux `sudo apt install libgtk-3-dev libmpv-dev libmimalloc-dev`.
+
+```bash
+git clone https://github.com/Staery/radioapp.git
+cd radioapp
+flutter pub get
+flutter run                 # выберите устройство: Android, Windows, Linux, Chrome…
+```
+
+```bash
+flutter analyze
+flutter test                # 91 тест, устройство не нужно
+```
+
+### Релизные сборки
+
+```bash
+flutter build apk --release                        # Android
+flutter build windows --release                    # Windows
+flutter build linux --release                      # Linux (при запуске нужен libmpv)
+flutter build web --release --no-web-resources-cdn # Веб
+```
+
+На Windows команда `bash scripts/build-windows-android.sh` (Git Bash) прогоняет тесты и кладёт APK для Android и
+zip-архив для Windows в папку `dist/`. Без Mac версии для iOS и macOS можно собрать на [Codemagic](https://codemagic.io)
+по приложенному `codemagic.yaml` или в CI.
+
+## ⚠️ Примечания
+
+- Потоки принадлежат радиостанциям; приложение только воспроизводит их публичные трансляции. Станция может временно
+  не вещать или быть недоступной в некоторых странах.
+- Релизная сборка для Android подписана отладочным ключом, чтобы её можно было сразу установить; для публикации в
+  магазине используйте свой ключ.
+
+## 📄 Лицензия
+
+[MIT](LICENSE) © 2021–2026 Anton Selkin. Шрифт Inter распространяется по [SIL Open Font License](assets/fonts/OFL.txt).

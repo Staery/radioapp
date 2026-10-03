@@ -1,0 +1,35 @@
+# Builds the Apple versions on Codemagic (https://codemagic.io) for people
+# without a Mac. Sign in with GitHub, add this repository and start a workflow.
+workflows:
+  macos:
+    name: macOS app
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      flutter: stable
+    scripts:
+      - name: Test
+        script: flutter pub get && flutter test
+      - name: Build
+        script: |
+          flutter build macos --release
+          ditto -c -k --keepParent build/macos/Build/Products/Release/Radio.app RadioApp-macos.zip
+    artifacts:
+      - RadioApp-macos.zip
+
+  ios-unsigned:
+    name: iOS (unsigned)
+    instance_type: mac_mini_m2
+    max_build_duration: 60
+    environment:
+      flutter: stable
+      xcode: latest
+    scripts:
+      - name: Build
+        script: |
+          flutter pub get
+          flutter build ios --release --no-codesign
+          mkdir -p Payload && cp -R build/ios/iphoneos/Runner.app Payload/
+          zip -qr RadioApp-ios-unsigned.ipa Payload
+    artifacts:
+      - RadioApp-ios-unsigned.ipa
