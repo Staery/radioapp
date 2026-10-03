@@ -1,11 +1,11 @@
 {
-    "name": "radioapp",
-    "short_name": "radioapp",
+    "name": "Radio",
+    "short_name": "Radio",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#0B0B14",
+    "theme_color": "#0B0B14",
+    "description": "Internet radio with voice control",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
