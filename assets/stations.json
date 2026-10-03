@@ -1,0 +1,196 @@
+{
+  "stations": [
+    {
+      "id": "humor-fm",
+      "name": "Humor FM",
+      "frequency": "92.8",
+      "location": {
+        "en": "Minsk",
+        "ru": "Минск",
+        "be": "Мінск"
+      },
+      "tagline": {
+        "en": "Jokes and pop hits",
+        "ru": "Шутки и песни",
+        "be": "Жарты і песні"
+      },
+      "description": {
+        "en": "Comedy shows and Russian-language pop music. The station's daily audience is listeners aged 20 to 65.",
+        "ru": "Юмористические программы и русскоязычная поп-музыка. Ежедневная аудитория — слушатели от 20 до 65 лет.",
+        "be": "Гумарыстычныя праграмы і рускамоўная поп-музыка. Штодзённая аўдыторыя — слухачы ад 20 да 65 гадоў."
+      },
+      "genre": "humor",
+      "language": "ru",
+      "color": "0xFFE11D48",
+      "streamUrl": "http://live.humorfm.by:8000/veseloeradio"
+    },
+    {
+      "id": "legendy-fm",
+      "name": "Legendy FM",
+      "frequency": "94.1",
+      "location": {
+        "en": "Minsk",
+        "ru": "Минск",
+        "be": "Мінск"
+      },
+      "tagline": {
+        "en": "Legends of the 80s and 90s",
+        "ru": "Легенды 80-х и 90-х",
+        "be": "Легенды 80-х і 90-х"
+      },
+      "description": {
+        "en": "Russian and international hits from the 1980s and 1990s, the music of a whole generation.",
+        "ru": "Русские и зарубежные хиты 1980-х и 1990-х — музыка целого поколения.",
+        "be": "Рускія і замежныя хіты 1980-х і 1990-х — музыка цэлага пакалення."
+      },
+      "genre": "retro",
+      "language": "ru",
+      "color": "0xFFF59E0B",
+      "streamUrl": "http://live.legendy.by:8000/legendyfm"
+    },
+    {
+      "id": "melodii-veka",
+      "name": "Melodii Veka",
+      "frequency": "96.2",
+      "location": {
+        "en": "Minsk",
+        "ru": "Минск",
+        "be": "Мінск"
+      },
+      "tagline": {
+        "en": "Songs of the century",
+        "ru": "Песни века",
+        "be": "Песні стагоддзя"
+      },
+      "description": {
+        "en": "Melodies of the 20th century: Soviet estrada, chanson and the best songs that are still sung today.",
+        "ru": "Мелодии XX века: советская эстрада, шансон и лучшие песни, которые поют до сих пор.",
+        "be": "Мелодыі XX стагоддзя: савецкая эстрада, шансон і лепшыя песні, якія спяваюць дагэтуль."
+      },
+      "genre": "retro",
+      "language": "ru",
+      "color": "0xFF8B5CF6",
+      "streamUrl": "https://air.melodiiveka.by:8443/mv"
+    },
+    {
+      "id": "kexp",
+      "name": "KEXP",
+      "frequency": "90.3",
+      "location": {
+        "en": "Seattle",
+        "ru": "Сиэтл",
+        "be": "Сіэтл"
+      },
+      "tagline": {
+        "en": "Where the music matters",
+        "ru": "Там, где музыка важна",
+        "be": "Там, дзе музыка мае значэнне"
+      },
+      "description": {
+        "en": "Listener-supported station known for discovering new indie and alternative artists and for its live sessions.",
+        "ru": "Станция на средства слушателей, известная открытием новых инди- и альтернативных артистов и живыми сессиями.",
+        "be": "Станцыя на сродкі слухачоў, вядомая адкрыццём новых індзі- і альтэрнатыўных артыстаў і жывымі сесіямі."
+      },
+      "genre": "indie",
+      "language": "en",
+      "color": "0xFF0EA5E9",
+      "streamUrl": "https://kexp-mp3-128.streamguys1.com/kexp128.mp3"
+    },
+    {
+      "id": "radio-paradise",
+      "name": "Radio Paradise",
+      "frequency": null,
+      "location": {
+        "en": "California",
+        "ru": "Калифорния",
+        "be": "Каліфорнія"
+      },
+      "tagline": {
+        "en": "Eclectic rock, hand-picked",
+        "ru": "Эклектичный рок, подобранный вручную",
+        "be": "Эклектычны рок, падабраны ўручную"
+      },
+      "description": {
+        "en": "A carefully curated mix of rock, indie, electronica and world music, chosen by people rather than algorithms.",
+        "ru": "Тщательно подобранная смесь рока, инди, электроники и world music — выбирают люди, а не алгоритмы.",
+        "be": "Старанна падабраная сумесь року, індзі, электронікі і world music — выбіраюць людзі, а не алгарытмы."
+      },
+      "genre": "rock",
+      "language": "en",
+      "color": "0xFF10B981",
+      "streamUrl": "https://stream.radioparadise.com/mp3-128"
+    },
+    {
+      "id": "jazz24",
+      "name": "Jazz24",
+      "frequency": null,
+      "location": {
+        "en": "Seattle",
+        "ru": "Сиэтл",
+        "be": "Сіэтл"
+      },
+      "tagline": {
+        "en": "Jazz around the clock",
+        "ru": "Джаз круглые сутки",
+        "be": "Джаз кругласутачна"
+      },
+      "description": {
+        "en": "Classic and contemporary jazz from the greatest names to new talent, 24 hours a day.",
+        "ru": "Классический и современный джаз — от великих имён до новых талантов, 24 часа в сутки.",
+        "be": "Класічны і сучасны джаз — ад вялікіх імёнаў да новых талентаў, 24 гадзіны на суткі."
+      },
+      "genre": "jazz",
+      "language": "en",
+      "color": "0xFFF97316",
+      "streamUrl": "https://live.wostreaming.net/direct/ppm-jazz24mp3-ibc1"
+    },
+    {
+      "id": "groove-salad",
+      "name": "Groove Salad",
+      "frequency": null,
+      "location": {
+        "en": "SomaFM, San Francisco",
+        "ru": "SomaFM, Сан-Франциско",
+        "be": "SomaFM, Сан-Францыска"
+      },
+      "tagline": {
+        "en": "Ambient beats and grooves",
+        "ru": "Эмбиент, биты и грувы",
+        "be": "Эмбіент, біты і грувы"
+      },
+      "description": {
+        "en": "A nicely chilled plate of ambient and downtempo beats and grooves. Perfect for focus.",
+        "ru": "Спокойная подборка эмбиента и даунтемпо. Идеально для концентрации.",
+        "be": "Спакойная падборка эмбіенту і даўнтэмпа. Ідэальна для канцэнтрацыі."
+      },
+      "genre": "chill",
+      "language": "en",
+      "color": "0xFF22C55E",
+      "streamUrl": "https://ice1.somafm.com/groovesalad-128-mp3"
+    },
+    {
+      "id": "indie-pop-rocks",
+      "name": "Indie Pop Rocks!",
+      "frequency": null,
+      "location": {
+        "en": "SomaFM, San Francisco",
+        "ru": "SomaFM, Сан-Франциско",
+        "be": "SomaFM, Сан-Францыска"
+      },
+      "tagline": {
+        "en": "New and classic indie pop",
+        "ru": "Новый и классический инди-поп",
+        "be": "Новы і класічны індзі-поп"
+      },
+      "description": {
+        "en": "New and classic favourite indie pop tracks, from bedroom pop to big festival anthems.",
+        "ru": "Новые и любимые классические инди-поп треки — от bedroom pop до фестивальных гимнов.",
+        "be": "Новыя і любімыя класічныя індзі-поп трэкі — ад bedroom pop да фестывальных гімнаў."
+      },
+      "genre": "pop",
+      "language": "en",
+      "color": "0xFFEC4899",
+      "streamUrl": "https://ice1.somafm.com/indiepop-128-mp3"
+    }
+  ]
+}
