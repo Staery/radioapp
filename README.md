@@ -19,23 +19,31 @@
 
 ---
 
-Radio plays live stations from Minsk and around the world. Swipe through the stations, tap play, or just say
-*“play jazz”*, *“next”*, *“включи ретро”* or *“уключы 96,2”*. Speech is recognised on the device and turned into
-commands by a small parser, so there is no cloud assistant, account or API key. The interface is translated into
-English, Russian and Belarusian.
+Radio plays hundreds of live stations from Belarus, Russia and around the world: 24 hand-picked ones are built in, and
+the rest come from the open [Radio Browser](https://www.radio-browser.info) directory. Show all of them or only
+Belarusian, Russian-language or Belarusian-language stations, swipe, tap play, or just say *“play jazz”*, *“next”*,
+*“включи ретро”* or *“уключы 92,8”*. Speech is recognised on the device and turned into commands by a small parser,
+so there is no cloud assistant, account or API key. The interface is translated into English, Russian and Belarusian.
+
+Some stations only work from Belarus and others only from abroad, so the app checks every stream **from the
+listener's own network** and hides the ones that do not open.
 
 ## 📸 Screenshots
 
 ![Radio in English, Belarusian and Russian](docs/screenshots/overview.png)
 
-<sub>The Linux build, from left to right: the station carousel (English), playback and the station list (Belarusian, Russian), a voice command (Belarusian).</sub>
+<sub>The Linux build, from left to right: the station carousel (English), choosing which stations to show (Russian), the station list and a voice command (Belarusian).</sub>
 
 ## ✨ Features
 
 | | |
 |---|---|
-| 📻 **Station carousel** | Large cards with the frequency, genre and city; the background takes the colour of the selected station |
-| 🎙 **Voice control** | Play, stop, next, previous, a station by frequency (*“96.2”*, *“96 point 2”*, *“96 и 2”*) or name, a genre, *add to favourites*. English, Russian and Belarusian phrases |
+| 📻 **Station carousel** | Large cards with the frequency or logo, genre, country and language; the background takes the colour of the selected station |
+| 🌐 **Hundreds of stations** | 24 hand-picked stations plus Belarusian, Russian, Russian-language, Belarusian-language and the most popular world stations from Radio Browser, cached for offline start and refreshed twice a day |
+| 🗂 **Which stations to show** | All, featured, Belarus, Russia, in Russian, in Belarusian, in English. The choice is remembered |
+| 🛰 **Works from your network** | Every stream is opened from the device in the background; geo-blocked or dead stations are hidden (or marked, if you prefer). A stream that fails while playing is marked too, and *next* skips it |
+| 🩹 **Self-healing streams** | When a built-in station moves to a new stream address, the app finds it in Radio Browser and switches over |
+| 🎙 **Voice control** | Play, stop, next, previous, a station by frequency (*“106.2”*, *“106 point 2”*, *“94 и 1”*) or name, a genre, *add to favourites*. English, Russian and Belarusian phrases |
 | ⌨️ **Typed commands** | The same commands can be typed, for platforms or rooms without a microphone |
 | 🌍 **Three languages** | English, Russian, Belarusian. Follows the system language, can be switched in the app and is remembered. Station descriptions are translated too |
 | ❤️ **Favourites and genres** | Filter chips for every genre and for favourites; favourites are saved on the device |
@@ -51,7 +59,7 @@ English, Russian and Belarusian.
 | Play | play, start, resume | включи, играй, давай | уключы, грай |
 | Stop | stop, pause, quiet | стоп, пауза, выключи | спыні, паўза, хопіць |
 | Next / previous | next, skip / previous, back | следующая / предыдущая, назад | наступная / папярэдняя |
-| Station | play 96.2, play Radio Paradise | включи 96,2, включи мелодии века | уключы 96 і 2 |
+| Station | play 106.2, play Radio Paradise | включи 106,2, включи наше радио | уключы 94 і 1 |
 | Genre | play jazz, something calm | включи рок, что-нибудь спокойное | уключы рэтра |
 | Favourite | add to favourites | добавь в избранное | дадай у абранае |
 
@@ -74,7 +82,8 @@ English, Russian and Belarusian.
 | State | `provider` + `ChangeNotifier` controllers; widgets only read state and call methods |
 | Audio | `just_audio`, `audio_session`, `just_audio_media_kit` on Windows and Linux |
 | Voice | `speech_to_text` and an own command parser (`VoiceCommandParser`) |
-| Storage | `shared_preferences` for favourites and the language |
+| Online catalogue | [Radio Browser API](https://api.radio-browser.info) over `http`, with server failover and a local cache |
+| Storage | `shared_preferences` for favourites, the language, the scope, stream checks and the catalogue cache |
 | Localization | `flutter_localizations` + ARB files (`gen-l10n`) for EN / RU / BE |
 | Tests | `flutter_test`: unit tests for parsing, the controller and the parser, widget tests for every screen and language |
 | CI/CD | GitHub Actions: analyze and test, then builds for all six platforms; tagged versions are published as releases. `codemagic.yaml` builds the Apple versions without a Mac |
@@ -98,6 +107,8 @@ flowchart LR
         V[VoiceInput<br/>speech_to_text]
         VP[VoiceCommandParser]
         R[StationRepository<br/>assets/stations.json]
+        OC[OnlineCatalog<br/>Radio Browser + cache]
+        SP[StreamProbe<br/>checks streams from here]
         F[FavoritesStore · LocaleStore<br/>shared_preferences]
     end
 
@@ -108,6 +119,8 @@ flowchart LR
     SH --> VP --> RC
     RC --> P
     RC --> R
+    RC --> OC
+    RC --> SP
     RC --> F
     LC --> F
 ```
@@ -120,8 +133,13 @@ flowchart LR
   Belarusian words are stored as stems, so every ending matches.
 - **The controller returns data, not text.** A voice command returns a `VoiceReply`; the UI turns it into a localized
   sentence. Errors are stored as the failed station, not as an English message.
-- **The station catalogue is data.** `assets/stations.json` holds names, frequencies, colours, stream URLs and
-  translated taglines, descriptions and cities. It is validated on load (required fields, http(s) URLs, unique ids).
+- **The station catalogue is data.** `assets/stations.json` holds names, frequencies, countries, languages, colours,
+  stream URLs and translated taglines, descriptions and cities. It is validated on load (required fields, http(s)
+  URLs, unique ids).
+- **Availability is checked where the listener is.** Radio Browser checks streams from servers outside Belarus, so a
+  Belarus-only stream looks broken there and a stream blocked in Belarus looks fine. The app therefore downloads
+  Belarusian stations without that filter and opens every stream itself (8 at a time, a few kilobytes each). Results
+  are kept for a day. If not a single stream opens, the device is offline and nothing is hidden.
 
 ### Project layout
 
@@ -173,7 +191,13 @@ flutter run                 # pick a device: Android, Windows, Linux, Chrome…
 
 ```bash
 flutter analyze
-flutter test                # 91 tests, no device needed
+flutter test                # 123 tests, no device needed
+```
+
+Check every built-in stream from your own network (prints OK / FAIL per station):
+
+```bash
+dart run tool/check_streams.dart
 ```
 
 ### Release builds
