@@ -30,6 +30,8 @@ class LocalizedText {
   String of(String languageCode) =>
       values[languageCode] ?? values['en'] ?? values.values.first;
 
+  Map<String, String> toJson() => values;
+
   @override
   String toString() => of('en');
 }
@@ -47,7 +49,11 @@ class Station {
     required this.streamUrl,
     this.frequency,
     this.location,
-  });
+    this.countryCode,
+    List<String> languages = const [],
+    this.logoUrl,
+    this.isFeatured = true,
+  }) : _languages = languages; // ignore: prefer_initializing_formals
 
   factory Station.fromJson(Map<String, Object?> json) {
     String required(String key) {
@@ -65,6 +71,14 @@ class Station {
       throw FormatException('Station stream URL is not http(s): $streamUrl');
     }
 
+    final countryCode = (json['country'] as String?)?.trim().toUpperCase();
+    final languages = (json['languages'] as List<Object?>?)
+        ?.whereType<String>()
+        .map((code) => code.trim().toLowerCase())
+        .where((code) => code.isNotEmpty)
+        .toList();
+    final logo = (json['logo'] as String?)?.trim();
+
     return Station(
       id: required('id'),
       name: required('name'),
@@ -78,8 +92,49 @@ class Station {
       location: location == null
           ? null
           : LocalizedText.fromJson(location, 'location'),
+      countryCode: countryCode == null || countryCode.isEmpty
+          ? null
+          : countryCode,
+      languages: languages ?? const [],
+      logoUrl: logo == null || logo.isEmpty ? null : logo,
+      isFeatured: json['featured'] as bool? ?? true,
     );
   }
+
+  /// The same shape that [Station.fromJson] reads; used for the catalogue cache.
+  Map<String, Object?> toJson() => {
+    'id': id,
+    'name': name,
+    'frequency': frequency,
+    'location': location?.toJson(),
+    'tagline': tagline.toJson(),
+    'description': description.toJson(),
+    'genre': genre,
+    'language': language,
+    'languages': languages,
+    'country': countryCode,
+    'color': '0x${color.toARGB32().toRadixString(16).padLeft(8, '0')}',
+    'streamUrl': streamUrl,
+    'logo': logoUrl,
+    'featured': isFeatured,
+  };
+
+  Station copyWith({String? streamUrl}) => Station(
+    id: id,
+    name: name,
+    tagline: tagline,
+    description: description,
+    genre: genre,
+    language: language,
+    color: color,
+    streamUrl: streamUrl ?? this.streamUrl,
+    frequency: frequency,
+    location: location,
+    countryCode: countryCode,
+    languages: languages,
+    logoUrl: logoUrl,
+    isFeatured: isFeatured,
+  );
 
   final String id;
   final String name;
@@ -91,8 +146,24 @@ class Station {
   final LocalizedText description;
   final String genre;
 
-  /// ISO 639-1 code of the language the station broadcasts in.
+  /// ISO 639-1 code of the main language the station broadcasts in.
   final String language;
+
+  final List<String> _languages;
+
+  /// Every language the station broadcasts in, [language] first.
+  List<String> get languages =>
+      _languages.isNotEmpty || language.isEmpty ? _languages : [language];
+
+  /// ISO 3166-1 alpha-2 code of the station's country, e.g. "BY".
+  final String? countryCode;
+
+  /// Station logo from the online catalogue, when there is one.
+  final String? logoUrl;
+
+  /// True for the bundled, hand-picked stations; false for stations from the
+  /// online catalogue.
+  final bool isFeatured;
   final Color color;
   final String streamUrl;
 

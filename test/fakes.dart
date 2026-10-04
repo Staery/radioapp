@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:ui' show Color;
 
+import 'package:radioapp/data/online_catalog.dart';
 import 'package:radioapp/data/station_repository.dart';
+import 'package:radioapp/data/stream_probe.dart';
 import 'package:radioapp/models/station.dart';
 import 'package:radioapp/player/radio_player.dart';
 import 'package:radioapp/voice/voice_input.dart';
@@ -111,3 +114,60 @@ class FakeVoiceInput implements VoiceInput {
   @override
   Future<void> stop() async {}
 }
+
+class FakeCatalog implements OnlineCatalog {
+  FakeCatalog(this.stations, {this.error, this.replacements = const {}});
+
+  List<Station> stations;
+  Object? error;
+  final Map<String, Station> replacements;
+  int loads = 0;
+  final replacementRequests = <String>[];
+
+  @override
+  Future<List<Station>> load({bool refresh = false}) async {
+    loads++;
+    if (error != null) throw error!;
+    return stations;
+  }
+
+  @override
+  Future<Station?> findReplacement(Station station) async {
+    replacementRequests.add(station.id);
+    return replacements[station.id];
+  }
+}
+
+/// Answers from a fixed list of broken URLs; everything else works.
+class FakeProbe implements StreamProbe {
+  FakeProbe([Set<String>? broken]) : broken = {...?broken};
+
+  final Set<String> broken;
+  final checked = <String>[];
+
+  @override
+  Future<StreamHealth> check(String url) async {
+    checked.add(url);
+    return broken.contains(url) ? StreamHealth.failed : StreamHealth.ok;
+  }
+}
+
+Station onlineStation(
+  String id, {
+  String country = 'BY',
+  List<String> languages = const ['ru'],
+  String genre = 'pop',
+  String? name,
+}) => Station(
+  id: 'rb:$id',
+  name: name ?? 'Online $id',
+  tagline: LocalizedText({'en': 'tag $id'}),
+  description: LocalizedText({'en': 'desc $id'}),
+  genre: genre,
+  language: languages.isEmpty ? '' : languages.first,
+  languages: languages,
+  countryCode: country,
+  color: const Color(0xFF8B5CF6),
+  streamUrl: 'https://online.example/$id',
+  isFeatured: false,
+);

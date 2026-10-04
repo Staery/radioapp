@@ -1,10 +1,14 @@
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 
 import '../data/favorites_store.dart';
+import '../data/online_catalog.dart';
+import '../data/stream_probe.dart';
 import '../data/station_repository.dart';
 import '../models/station.dart';
+import '../models/station_scope.dart';
 import '../player/radio_player.dart';
 import '../voice/voice_command.dart';
 
@@ -32,6 +36,9 @@ class VoiceReply {
   final String? phrase;
 }
 
+/// State of the online station catalogue.
+enum CatalogStatus { off, loading, loaded, failed }
+
 /// Special filter value that shows only favourite stations.
 const favoritesFilter = 'favorites';
 
@@ -42,8 +49,18 @@ class RadioController extends ChangeNotifier {
     required this._repository,
     required this._player,
     required FavoritesStore favorites,
+    OnlineCatalog? catalog,
+    StreamProbe? probe,
+    SettingsStore? settings,
     this.connectTimeout = const Duration(seconds: 20),
-  }) : _favoritesStore = favorites {
+    this.healthMaxAge = const Duration(hours: 24),
+    this.probeConcurrency = 8,
+    DateTime Function()? now,
+  }) : _favoritesStore = favorites,
+       _catalog = catalog, // ignore: prefer_initializing_formals
+       _probe = probe, // ignore: prefer_initializing_formals
+       _settings = settings ?? InMemorySettingsStore(),
+       _now = now ?? DateTime.now {
     _subscriptions
       ..add(_player.phases.listen(_onPhase))
       ..add(
@@ -58,6 +75,20 @@ class RadioController extends ChangeNotifier {
   final StationRepository _repository;
   final RadioPlayer _player;
   final FavoritesStore _favoritesStore;
+  final OnlineCatalog? _catalog;
+  final StreamProbe? _probe;
+  final SettingsStore _settings;
+  final DateTime Function() _now;
+
+  /// How long an availability check from this device is trusted.
+  final Duration healthMaxAge;
+
+  /// How many streams are checked at the same time.
+  final int probeConcurrency;
+
+  static const _scopeKey = 'station_scope';
+  static const _hideUnavailableKey = 'hide_unavailable';
+  static const _healthKey = 'stream_health_v1';
   final _subscriptions = <StreamSubscription<Object?>>[];
 
   /// A stream that has not started playing after this long is reported as
@@ -65,7 +96,15 @@ class RadioController extends ChangeNotifier {
   final Duration connectTimeout;
   Timer? _connectTimer;
 
+  List<Station> _featured = const [];
+  List<Station> _online = const [];
   List<Station> _stations = const [];
+  CatalogStatus _catalogStatus = CatalogStatus.off;
+  StationScope _scope = StationScope.all;
+  bool _hideUnavailable = true;
+  final _health = <String, ({StreamHealth health, DateTime checkedAt})>{};
+  final _recovered = <String>{};
+  bool _probing = false;
   Set<String> _favorites = {};
   String? _filter;
   Station? _selected;
@@ -83,20 +122,54 @@ class RadioController extends ChangeNotifier {
 
   bool get isLoaded => _loaded;
   String? get loadError => _loadError;
+
+  /// Featured stations first, then stations from the online catalogue.
   List<Station> get stations => _stations;
 
-  /// Stations that pass the current filter, in catalogue order.
+  CatalogStatus get catalogStatus => _catalogStatus;
+  StationScope get scope => _scope;
+  bool get hideUnavailable => _hideUnavailable;
+  bool get isCheckingStreams => _probing;
+
+  /// False when the stream failed from this device (geo-blocked, offline…).
+  bool isAvailable(Station station) =>
+      _health[station.id]?.health != StreamHealth.failed;
+
+  /// Stations in the chosen scope that can be played from here.
+  List<Station> get scopedStations => [
+    for (final station in _stations)
+      if (_scope.matches(station) &&
+          (!_hideUnavailable || isAvailable(station) || station == _selected))
+        station,
+  ];
+
+  /// Stations that pass the scope and the genre or favourites filter.
   List<Station> get visibleStations {
+    final scoped = scopedStations;
     final filter = _filter;
-    if (filter == null) return _stations;
+    if (filter == null) return scoped;
     if (filter == favoritesFilter) {
-      return _stations.where((s) => _favorites.contains(s.id)).toList();
+      return scoped.where((s) => _favorites.contains(s.id)).toList();
     }
-    return _stations.where((s) => s.genre == filter).toList();
+    return scoped.where((s) => s.genre == filter).toList();
   }
 
-  /// Genres present in the catalogue, in order of first appearance.
-  List<String> get genres => _stations.map((s) => s.genre).toSet().toList();
+  /// Number of stations in [scope], for the scope picker.
+  int countIn(StationScope scope) => _stations
+      .where((s) => scope.matches(s) && (!_hideUnavailable || isAvailable(s)))
+      .length;
+
+  /// Genres of the stations in the current scope, most common first.
+  List<String> get genres {
+    final counts = <String, int>{};
+    for (final station in scopedStations) {
+      counts[station.genre] = (counts[station.genre] ?? 0) + 1;
+    }
+    final result = counts.keys.where((g) => g != 'other').toList()
+      ..sort((a, b) => counts[b]!.compareTo(counts[a]!));
+    if (counts.containsKey('other')) result.add('other');
+    return result;
+  }
 
   String? get filter => _filter;
   Station? get selected => _selected;
@@ -130,18 +203,172 @@ class RadioController extends ChangeNotifier {
       final results = await Future.wait([
         _repository.loadStations(),
         _favoritesStore.load(),
+        _settings.read(_scopeKey),
+        _settings.read(_hideUnavailableKey),
+        _settings.read(_healthKey),
       ]);
-      _stations = results[0] as List<Station>;
-      _favorites = {...results[1] as Set<String>}
-        ..retainWhere((id) => _stations.any((s) => s.id == id));
-      _selected = _stations.isEmpty ? null : _stations.first;
+      _featured = results[0]! as List<Station>;
+      _favorites = {...results[1]! as Set<String>};
+      _scope = StationScope.fromKey(results[2] as String?);
+      _hideUnavailable = results[3] != 'false';
+      _readHealth(results[4] as String?);
+      _rebuild();
+      _selected = _firstVisible();
       _loadError = null;
     } catch (error) {
       _loadError = '$error';
     }
     _loaded = true;
     _notify();
+    if (_loadError == null) {
+      if (_catalog != null) {
+        unawaited(refreshCatalog());
+      } else {
+        unawaited(_checkStreams());
+      }
+    }
   }
+
+  /// Downloads (or reads from cache) the online catalogue and then checks
+  /// which streams answer from this device.
+  Future<void> refreshCatalog({bool force = false}) async {
+    final catalog = _catalog;
+    if (catalog == null || _catalogStatus == CatalogStatus.loading) return;
+    _catalogStatus = CatalogStatus.loading;
+    _notify();
+    try {
+      _online = await catalog.load(refresh: force);
+      _catalogStatus = CatalogStatus.loaded;
+    } catch (_) {
+      _catalogStatus = CatalogStatus.failed;
+    }
+    _rebuild();
+    _selected ??= _firstVisible();
+    if (!isActive) _keepSelectionVisible();
+    _notify();
+    await _checkStreams();
+  }
+
+  /// Shows all stations, the featured ones, one country or one language.
+  Future<void> setScope(StationScope scope) async {
+    if (_scope == scope) return;
+    _scope = scope;
+    _keepSelectionVisible();
+    _notify();
+    await _settings.write(_scopeKey, scope.key);
+  }
+
+  /// Hides or shows stations whose stream failed from this device.
+  Future<void> setHideUnavailable(bool hide) async {
+    if (_hideUnavailable == hide) return;
+    _hideUnavailable = hide;
+    _keepSelectionVisible();
+    _notify();
+    await _settings.write(_hideUnavailableKey, '$hide');
+  }
+
+  /// Featured stations first; online stations that duplicate a featured one
+  /// (same name and country) are left out.
+  void _rebuild() {
+    String key(Station s) =>
+        '${s.name.toLowerCase().replaceAll(RegExp(r'[^\p{L}\p{N}]+', unicode: true), '')}|${s.countryCode}';
+    final featuredKeys = {for (final s in _featured) key(s)};
+    _stations = List.unmodifiable([
+      ..._featured,
+      for (final s in _online)
+        if (!featuredKeys.contains(key(s))) s,
+    ]);
+  }
+
+  Station? _firstVisible() {
+    final visible = visibleStations;
+    return visible.isEmpty
+        ? (_stations.isEmpty ? null : _stations.first)
+        : visible.first;
+  }
+
+  void _keepSelectionVisible() {
+    final visible = visibleStations;
+    if (visible.isNotEmpty && !visible.contains(_selected)) {
+      _selected = visible.first;
+    }
+  }
+
+  /// Opens every stream that has no recent result, a few at a time, and
+  /// remembers which ones work from this network.
+  Future<void> _checkStreams() async {
+    final probe = _probe;
+    if (probe == null || _probing) return;
+    final now = _now();
+    final queue = [
+      for (final station in _stations)
+        if (_health[station.id] == null ||
+            now.difference(_health[station.id]!.checkedAt) > healthMaxAge)
+          station,
+    ];
+    if (queue.isEmpty) return;
+    _probing = true;
+    _notify();
+    var done = 0;
+    final results = <String, StreamHealth>{};
+    Future<void> worker() async {
+      while (queue.isNotEmpty && !_disposed) {
+        final station = queue.removeAt(0);
+        final health = await probe.check(station.streamUrl);
+        if (_disposed) return;
+        results[station.id] = health;
+        _health[station.id] = (health: health, checkedAt: _now());
+        if (++done % 10 == 0) _notifyKeepingSelection();
+      }
+    }
+
+    await Future.wait([for (var i = 0; i < probeConcurrency; i++) worker()]);
+    if (_disposed) return;
+    _probing = false;
+    // Not a single stream opened: the device is offline or behind a strict
+    // firewall. That says nothing about the stations, so forget this run.
+    final anyOk = results.values.any((health) => health == StreamHealth.ok);
+    if (!anyOk && results.length > 2) {
+      results.keys.forEach(_health.remove);
+      _notifyKeepingSelection();
+      return;
+    }
+    _notifyKeepingSelection();
+    await _saveHealth();
+  }
+
+  void _notifyKeepingSelection() {
+    // The station that is playing never disappears from the carousel.
+    if (!isActive) _keepSelectionVisible();
+    _notify();
+  }
+
+  void _readHealth(String? raw) {
+    if (raw == null) return;
+    try {
+      final json = jsonDecode(raw) as Map<String, Object?>;
+      json.forEach((id, value) {
+        final [ok, millis] = value! as List<Object?>;
+        _health[id] = (
+          health: ok == true ? StreamHealth.ok : StreamHealth.failed,
+          checkedAt: DateTime.fromMillisecondsSinceEpoch(millis! as int),
+        );
+      });
+    } on Object {
+      _health.clear();
+    }
+  }
+
+  Future<void> _saveHealth() => _settings.write(
+    _healthKey,
+    jsonEncode({
+      for (final entry in _health.entries)
+        entry.key: [
+          entry.value.health == StreamHealth.ok,
+          entry.value.checkedAt.millisecondsSinceEpoch,
+        ],
+    }),
+  );
 
   /// Selects the station at [index] in [visibleStations] without playing it.
   void select(int index) {
@@ -158,10 +385,7 @@ class RadioController extends ChangeNotifier {
   void setFilter(String? genre) {
     if (_filter == genre) return;
     _filter = genre;
-    final visible = visibleStations;
-    if (visible.isNotEmpty && !visible.contains(_selected)) {
-      _selected = visible.first;
-    }
+    _keepSelectionVisible();
     _notify();
   }
 
@@ -169,7 +393,10 @@ class RadioController extends ChangeNotifier {
   Future<void> play([Station? station]) async {
     final target = station ?? _selected;
     if (target == null) return;
-    if (!visibleStations.contains(target)) _filter = null;
+    if (!visibleStations.contains(target)) {
+      _filter = null;
+      if (!_scope.matches(target)) _scope = StationScope.all;
+    }
     _selected = target;
     _current = target;
     _status = PlaybackStatus.loading;
@@ -212,8 +439,15 @@ class RadioController extends ChangeNotifier {
   Future<void> _step(int delta, {bool forcePlay = false}) async {
     final visible = visibleStations;
     if (visible.isEmpty) return;
-    final index = (selectedIndex + delta) % visible.length;
-    final target = visible[index < 0 ? index + visible.length : index];
+    var index = selectedIndex;
+    var target = visible[index];
+    // Skip stations that are known not to work from here.
+    for (var i = 0; i < visible.length; i++) {
+      index = (index + delta) % visible.length;
+      if (index < 0) index += visible.length;
+      target = visible[index];
+      if (isAvailable(target)) break;
+    }
     if (forcePlay || isActive) {
       await play(target);
     } else {
@@ -276,7 +510,16 @@ class RadioController extends ChangeNotifier {
         unawaited(play(station));
         return VoiceReply(VoiceReplyKind.playing, station: station);
       case PlayGenreCommand(:final genre):
-        final matching = _stations.where((s) => s.genre == genre).toList();
+        final inScope = scopedStations.where(
+          (s) => s.genre == genre && isAvailable(s),
+        );
+        final matching =
+            (inScope.isNotEmpty
+                    ? inScope
+                    : _stations.where(
+                        (s) => s.genre == genre && isAvailable(s),
+                      ))
+                .toList();
         if (matching.isEmpty) return const VoiceReply(VoiceReplyKind.notHeard);
         // Ask for the same genre again to move on to its next station.
         final current = _current;
@@ -324,11 +567,41 @@ class RadioController extends ChangeNotifier {
   }
 
   void _fail(Object error) {
+    final station = _current;
+    if (kDebugMode) debugPrint('Playback error on ${station?.id}: $error');
+    if (station != null) {
+      _health[station.id] = (health: StreamHealth.failed, checkedAt: _now());
+      unawaited(_saveHealth());
+      // A featured station may have moved to a new stream address: look it up
+      // in the online catalogue once before giving up.
+      if (station.isFeatured &&
+          _catalog != null &&
+          _recovered.add(station.id)) {
+        unawaited(_recover(station, _request));
+        return;
+      }
+    }
     _status = PlaybackStatus.error;
     _trackTitle = null;
-    _failedStation = _current;
-    if (kDebugMode) debugPrint('Playback error: $error');
+    _failedStation = station;
     _notify();
+  }
+
+  Future<void> _recover(Station station, int request) async {
+    final replacement = await _catalog!.findReplacement(station);
+    if (_disposed || request != _request) return; // The listener moved on.
+    if (replacement == null) {
+      _status = PlaybackStatus.error;
+      _trackTitle = null;
+      _failedStation = station;
+      _notify();
+      return;
+    }
+    final fixed = station.copyWith(streamUrl: replacement.streamUrl);
+    _featured = [for (final s in _featured) s.id == station.id ? fixed : s];
+    _health.remove(station.id);
+    _rebuild();
+    await play(fixed);
   }
 
   void _notify() {

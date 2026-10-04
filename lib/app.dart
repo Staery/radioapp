@@ -3,8 +3,10 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'data/favorites_store.dart';
+import 'data/online_catalog.dart';
 import 'data/station_repository.dart';
 import 'l10n/app_localizations.dart';
+import 'data/stream_probe.dart';
 import 'player/radio_player.dart';
 import 'state/locale_controller.dart';
 import 'state/radio_controller.dart';
@@ -21,6 +23,9 @@ class RadioApp extends StatelessWidget {
     required this.favorites,
     required this.voice,
     required this.localeStore,
+    this.catalog,
+    this.probe,
+    this.settings,
   });
 
   final StationRepository repository;
@@ -28,6 +33,9 @@ class RadioApp extends StatelessWidget {
   final FavoritesStore favorites;
   final VoiceInput voice;
   final LocaleStore localeStore;
+  final OnlineCatalog? catalog;
+  final StreamProbe? probe;
+  final SettingsStore? settings;
 
   @override
   Widget build(BuildContext context) {
@@ -38,6 +46,9 @@ class RadioApp extends StatelessWidget {
             repository: repository,
             player: player,
             favorites: favorites,
+            catalog: catalog,
+            probe: probe,
+            settings: settings,
           )..load(),
         ),
         ChangeNotifierProvider(

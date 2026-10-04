@@ -33,3 +33,29 @@ class InMemoryFavoritesStore implements FavoritesStore {
   @override
   Future<void> save(Set<String> ids) async => this.ids = {...ids};
 }
+
+/// Small key-value settings, e.g. the chosen station scope.
+abstract interface class SettingsStore {
+  Future<String?> read(String key);
+  Future<void> write(String key, String value);
+}
+
+class SharedPreferencesSettingsStore implements SettingsStore {
+  @override
+  Future<String?> read(String key) async =>
+      (await SharedPreferences.getInstance()).getString(key);
+
+  @override
+  Future<void> write(String key, String value) async =>
+      (await SharedPreferences.getInstance()).setString(key, value);
+}
+
+class InMemorySettingsStore implements SettingsStore {
+  final values = <String, String>{};
+
+  @override
+  Future<String?> read(String key) async => values[key];
+
+  @override
+  Future<void> write(String key, String value) async => values[key] = value;
+}
