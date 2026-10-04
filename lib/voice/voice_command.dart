@@ -25,7 +25,7 @@ class PreviousCommand extends VoiceCommand {
   const PreviousCommand();
 }
 
-/// "play 96.2", "включи радио паради".
+/// "play 92.8", "включи радио паради".
 class PlayStationCommand extends VoiceCommand {
   const PlayStationCommand(this.station);
 
@@ -123,6 +123,30 @@ class VoiceCommandParser {
       'індзі',
       'альтэрнатыў',
     ],
+    'news': ['news', 'talk', 'новости', 'новостн', 'навіны', 'навін'],
+    'classical': [
+      'classical',
+      'classic music',
+      'классик',
+      'классическ',
+      'класік',
+      'класічн',
+    ],
+    'electronic': [
+      ...['electronic', 'dance', 'techno', 'house', 'edm'],
+      ...['электрон', 'танцевальн', 'танцы', 'танцавальн', 'электрон'],
+    ],
+    'hiphop': [
+      'hip hop',
+      'hip-hop',
+      'rap',
+      'хип хоп',
+      'хип-хоп',
+      'рэп',
+      'хіп хоп',
+      'хіп-хоп',
+    ],
+    'chanson': ['chanson', 'шансон'],
     'chill': [
       ...['chill', 'ambient', 'relax', 'calm', 'lounge'],
       ...['чил', 'спокойн', 'расслаб', 'эмбиент'],
@@ -134,10 +158,6 @@ class VoiceCommandParser {
   static const stationAliases = <String, List<String>>{
     'humor-fm': ['юмор фм', 'гумар фм', 'humor fm', 'humour fm'],
     'legendy-fm': ['легенды', 'legendy', 'legends'],
-    'melodii-veka': [
-      ...['мелодии века', 'melodii veka', 'melodies of the century'],
-      'мелодыі стагоддзя',
-    ],
     'kexp': ['kexp', 'k e x p', 'кексп'],
     'radio-paradise': [
       ...['radio paradise', 'paradise', 'радио парадайз', 'парадайз'],
@@ -146,6 +166,70 @@ class VoiceCommandParser {
     'jazz24': ['jazz24', 'jazz 24', 'джаз 24'],
     'groove-salad': ['groove salad', 'грув салад', 'салад'],
     'indie-pop-rocks': ['indie pop rocks', 'инди поп', 'індзі поп'],
+    'radio-record': [
+      'radio record',
+      'record',
+      'радио рекорд',
+      'рекорд',
+      'радыё рэкорд',
+      'рэкорд',
+    ],
+    'record-chill': [
+      'record chill',
+      'рекорд чилаут',
+      'рекорд чил',
+      'рэкорд чыл',
+    ],
+    'europa-plus': [
+      'europa plus',
+      'europe plus',
+      'европа плюс',
+      'еўропа плюс',
+      'европа',
+    ],
+    'retro-fm': ['retro fm', 'ретро фм', 'рэтра фм'],
+    'nashe-radio': ['nashe radio', 'наше радио', 'наша радыё', 'наше'],
+    'radio-jazz': ['radio jazz', 'радио джаз', 'радыё джаз'],
+    'bbc-world-service': ['bbc', 'bbc world service', 'би би си', 'бибиси'],
+    'fip': ['fip', 'фип'],
+    'fip-jazz': ['fip jazz', 'фип джаз'],
+    'swiss-jazz': [
+      'swiss jazz',
+      'radio swiss jazz',
+      'свисс джаз',
+      'швейцарский джаз',
+      'швейцарскі джаз',
+    ],
+    'swiss-classic': [
+      'swiss classic',
+      'radio swiss classic',
+      'свисс классик',
+      'швейцарская классика',
+      'швейцарская класіка',
+    ],
+    'radio-paradise-mellow': [
+      'paradise mellow',
+      'radio paradise mellow',
+      'парадайз мелоу',
+    ],
+    'radio-paradise-rock': [
+      'paradise rock',
+      'radio paradise rock',
+      'парадайз рок',
+    ],
+    'drone-zone': ['drone zone', 'дрон зон'],
+    'secret-agent': [
+      'secret agent',
+      'секрет эйджент',
+      'секретный агент',
+      'сакрэтны агент',
+    ],
+    'underground-80s': [
+      'underground 80s',
+      'underground eighties',
+      'андеграунд 80',
+    ],
+    'defcon': ['defcon', 'def con', 'дефкон'],
   };
 
   VoiceCommand parse(String phrase) {
@@ -224,7 +308,7 @@ class VoiceCommandParser {
   /// True when [word] starts at a word boundary, so "rock" does not match
   /// "brock" but the stem "следующ" matches "следующую".
   static bool _containsWord(String text, String word) {
-    word = word.replaceAll('ў', 'у');
+    word = word.replaceAll('ў', 'у').replaceAll('ё', 'е');
     var index = text.indexOf(word);
     while (index >= 0) {
       if (index == 0 || text[index - 1] == ' ') return true;

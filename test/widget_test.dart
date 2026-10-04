@@ -46,7 +46,7 @@ void main() {
     await pumpApp(tester);
 
     expect(find.text('Radio'), findsOneWidget);
-    expect(find.text('8 live stations · voice control'), findsOneWidget);
+    expect(find.text('24 live stations · voice control'), findsOneWidget);
     expect(find.text('Humor FM'), findsOneWidget);
     expect(find.text('92.8'), findsOneWidget);
     expect(find.text('Tap play to listen'), findsOneWidget);
@@ -106,7 +106,7 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('Jazz24'), findsOneWidget);
 
-    await tester.tap(find.byTooltip('Add to favourites'));
+    await tester.tap(find.byTooltip('Add to favourites').first);
     await tester.pumpAndSettle();
     expect(favorites.ids, {'jazz24'});
 
@@ -128,7 +128,7 @@ void main() {
 
     await tester.tap(find.byTooltip('All stations'));
     await tester.pumpAndSettle();
-    expect(find.text('All stations'), findsOneWidget);
+    expect(find.text('Search by name, genre or frequency'), findsOneWidget);
 
     await tester.enterText(find.byType(TextField), 'paradise');
     await tester.pumpAndSettle();
@@ -139,7 +139,7 @@ void main() {
     await tester.tap(tile);
     await _settle(tester);
     expect(player.played.single, 'https://stream.radioparadise.com/mp3-128');
-    expect(find.text('All stations'), findsNothing);
+    expect(find.text('Search by name, genre or frequency'), findsNothing);
   });
 
   testWidgets('spoken command is executed', (tester) async {
@@ -169,10 +169,10 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.textContaining('not available'), findsOneWidget);
 
-    await tester.enterText(find.byType(TextField), 'play 96.2');
+    await tester.enterText(find.byType(TextField), 'play 94.1');
     await tester.testTextInput.receiveAction(TextInputAction.send);
     await tester.pump();
-    expect(player.played.single, 'https://air.melodiiveka.by:8443/mv');
+    expect(player.played.single, 'http://live.legendy.by:8000/legendyfm');
     await _settle(tester, seconds: 2);
   });
 
@@ -190,7 +190,7 @@ void main() {
     await pumpApp(tester, language: 'ru');
 
     expect(find.text('Радио'), findsOneWidget);
-    expect(find.text('8 станций · голосовое управление'), findsOneWidget);
+    expect(find.text('24 станции · голосовое управление'), findsOneWidget);
     expect(find.text('Шутки и песни'), findsOneWidget);
     expect(find.text('Нажмите «Слушать»'), findsOneWidget);
     expect(find.widgetWithText(ChoiceChip, 'Избранное'), findsOneWidget);
@@ -200,7 +200,7 @@ void main() {
     await pumpApp(tester, language: 'be');
 
     expect(find.text('Радыё'), findsOneWidget);
-    expect(find.text('8 станцый · галасавое кіраванне'), findsOneWidget);
+    expect(find.text('24 станцыі · галасавое кіраванне'), findsOneWidget);
     expect(find.text('Жарты і песні'), findsOneWidget);
     expect(find.text('Мінск'), findsWidgets);
     expect(find.byTooltip('Слухаць'), findsOneWidget);
@@ -240,6 +240,21 @@ void main() {
       resolveLocale([const Locale('be', 'BY')], supported),
       const Locale('be'),
     );
+  });
+  testWidgets('scope picker shows only Belarusian stations', (tester) async {
+    await pumpApp(tester);
+
+    await tester.tap(find.byTooltip('Show stations'));
+    await tester.pumpAndSettle();
+    expect(find.text('Show stations'), findsOneWidget);
+    expect(find.text('Only stations available here'), findsOneWidget);
+
+    await tester.tap(find.text('Belarus'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('2 live stations · voice control'), findsOneWidget);
+    expect(find.text('Humor FM'), findsOneWidget);
+    expect(find.widgetWithText(ActionChip, 'Belarus'), findsOneWidget);
   });
 }
 

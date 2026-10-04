@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../state/radio_controller.dart';
 import 'l10n.dart';
 import 'sheets/language_sheet.dart';
+import 'sheets/scope_sheet.dart';
 import 'sheets/sleep_timer_sheet.dart';
 import 'sheets/stations_sheet.dart';
 import 'sheets/voice_sheet.dart';
@@ -53,6 +54,8 @@ class _HomePageState extends State<HomePage> {
         // A new filter means a new list: jump instead of animating through it.
         _lastFilter = radio.filter;
         if (page != target) _pageController.jumpToPage(target);
+      } else if (page != null && (page - target).abs() > 3) {
+        _pageController.jumpToPage(target);
       } else if (page != null && page != target) {
         _pageController.animateToPage(
           target,
@@ -142,14 +145,17 @@ class _HomePageState extends State<HomePage> {
     return Column(
       children: [
         _Header(
-          stationCount: radio.stations.length,
+          stationCount: radio.scopedStations.length,
           sleepOn: radio.sleepAt != null,
+          busy:
+              radio.catalogStatus == CatalogStatus.loading ||
+              radio.isCheckingStreams,
         ),
         _GenreChips(radio: radio),
         const SizedBox(height: 12),
         Expanded(
           child: visible.isEmpty
-              ? const _EmptyFavorites()
+              ? _EmptyState(favorites: radio.filter == favoritesFilter)
               : PageView.builder(
                   controller: _pageController,
                   itemCount: visible.length,
@@ -187,6 +193,7 @@ class _HomePageState extends State<HomePage> {
                               ? radio.stop()
                               : radio.play(station),
                           onFavorite: () => radio.toggleFavorite(station),
+                          available: radio.isAvailable(station),
                         ),
                       ),
                     );
@@ -208,10 +215,15 @@ class _HomePageState extends State<HomePage> {
 }
 
 class _Header extends StatelessWidget {
-  const _Header({required this.stationCount, required this.sleepOn});
+  const _Header({
+    required this.stationCount,
+    required this.sleepOn,
+    required this.busy,
+  });
 
   final int stationCount;
   final bool sleepOn;
+  final bool busy;
 
   @override
   Widget build(BuildContext context) {
@@ -245,12 +257,27 @@ class _Header extends StatelessWidget {
                     letterSpacing: -0.4,
                   ),
                 ),
-                Text(
-                  context.l10n.headerSubtitle(stationCount),
-                  style: const TextStyle(
-                    color: AppTheme.textSecondary,
-                    fontSize: 13,
-                  ),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        context.l10n.headerSubtitle(stationCount),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          color: AppTheme.textSecondary,
+                          fontSize: 13,
+                        ),
+                      ),
+                    ),
+                    if (busy) ...[
+                      const SizedBox(width: 6),
+                      const SizedBox.square(
+                        dimension: 10,
+                        child: CircularProgressIndicator(strokeWidth: 1.5),
+                      ),
+                    ],
+                  ],
                 ),
               ],
             ),
@@ -301,6 +328,22 @@ class _GenreChips extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ActionChip(
+              avatar: Icon(ScopeSheet.iconFor(radio.scope), size: 16),
+              label: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(scopeLabel(l10n, radio.scope)),
+                  const Icon(Icons.expand_more_rounded, size: 18),
+                ],
+              ),
+              tooltip: l10n.scopeTitle,
+              side: const BorderSide(color: AppTheme.accent),
+              onPressed: () => ScopeSheet.show(context),
+            ),
+          ),
           chip(l10n.filterAll, null),
           chip(
             l10n.filterFavorites,
@@ -323,6 +366,16 @@ class _PageDots extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (count > 12) {
+      return Text(
+        '${index + 1} / $count',
+        style: const TextStyle(
+          color: AppTheme.textSecondary,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      );
+    }
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -342,8 +395,10 @@ class _PageDots extends StatelessWidget {
   }
 }
 
-class _EmptyFavorites extends StatelessWidget {
-  const _EmptyFavorites();
+class _EmptyState extends StatelessWidget {
+  const _EmptyState({required this.favorites});
+
+  final bool favorites;
 
   @override
   Widget build(BuildContext context) {
@@ -354,19 +409,19 @@ class _EmptyFavorites extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Icon(
-              Icons.favorite_border_rounded,
+            Icon(
+              favorites ? Icons.favorite_border_rounded : Icons.radio_rounded,
               size: 48,
               color: AppTheme.textSecondary,
             ),
             const SizedBox(height: 12),
             Text(
-              l10n.noFavoritesTitle,
+              favorites ? l10n.noFavoritesTitle : l10n.noStationsTitle,
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
             ),
             const SizedBox(height: 6),
             Text(
-              l10n.noFavoritesHint,
+              favorites ? l10n.noFavoritesHint : l10n.noStationsHint,
               textAlign: TextAlign.center,
               style: const TextStyle(color: AppTheme.textSecondary),
             ),

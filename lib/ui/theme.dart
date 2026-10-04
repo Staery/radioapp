@@ -92,5 +92,10 @@ IconData genreIcon(String genre) => switch (genre) {
   'humor' => Icons.sentiment_very_satisfied_rounded,
   'indie' => Icons.graphic_eq_rounded,
   'chill' => Icons.spa_rounded,
+  'news' => Icons.newspaper_rounded,
+  'classical' => Icons.music_note_rounded,
+  'electronic' => Icons.equalizer_rounded,
+  'hiphop' => Icons.mic_external_on_rounded,
+  'chanson' => Icons.nightlife_rounded,
   _ => Icons.radio_rounded,
 };

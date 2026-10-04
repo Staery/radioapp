@@ -36,6 +36,7 @@ class _StationsSheetState extends State<StationsSheet> {
       s.genre,
       genreLabel(l10n, s.genre),
       s.frequency ?? '',
+      s.countryCode ?? '',
       ...s.tagline.values.values,
       ...?s.location?.values.values,
     ].any((field) => field.toLowerCase().contains(q));
@@ -44,7 +45,7 @@ class _StationsSheetState extends State<StationsSheet> {
   @override
   Widget build(BuildContext context) {
     final radio = context.watch<RadioController>();
-    final stations = radio.stations.where(_matches).toList();
+    final stations = radio.scopedStations.where(_matches).toList();
 
     return DraggableScrollableSheet(
       expand: false,
@@ -67,7 +68,7 @@ class _StationsSheetState extends State<StationsSheet> {
                   ),
                 ),
                 Text(
-                  context.l10n.stationCount(radio.stations.length),
+                  context.l10n.stationCount(radio.scopedStations.length),
                   style: const TextStyle(color: AppTheme.textSecondary),
                 ),
               ],
@@ -107,6 +108,7 @@ class _StationsSheetState extends State<StationsSheet> {
                           radio.play(station);
                         },
                         onFavorite: () => radio.toggleFavorite(station),
+                        available: radio.isAvailable(station),
                       );
                     },
                   ),
@@ -124,9 +126,11 @@ class _StationTile extends StatelessWidget {
     required this.playing,
     required this.onTap,
     required this.onFavorite,
+    this.available = true,
   });
 
   final Station station;
+  final bool available;
   final bool favorite;
   final bool playing;
   final VoidCallback onTap;
@@ -134,57 +138,79 @@ class _StationTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
-      tileColor: playing ? station.color.withValues(alpha: 0.14) : null,
-      leading: Container(
-        width: 48,
-        height: 48,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(14),
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              station.color,
-              Color.lerp(station.color, Colors.black, 0.5)!,
-            ],
+    return Opacity(
+      opacity: available ? 1 : 0.45,
+      child: ListTile(
+        onTap: onTap,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(18)),
+        tileColor: playing ? station.color.withValues(alpha: 0.14) : null,
+        leading: Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(14),
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                station.color,
+                Color.lerp(station.color, Colors.black, 0.5)!,
+              ],
+            ),
           ),
+          child: playing
+              ? const Equalizer(active: true, size: 18)
+              : station.frequency != null
+              ? Text(
+                  station.frequency!,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w800,
+                    fontSize: 13,
+                    color: Colors.white,
+                  ),
+                )
+              : station.logoUrl != null
+              ? ClipRRect(
+                  borderRadius: BorderRadius.circular(14),
+                  child: Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.all(4),
+                    child: Image.network(
+                      station.logoUrl!,
+                      fit: BoxFit.contain,
+                      errorBuilder: (_, _, _) => Icon(
+                        genreIcon(station.genre),
+                        color: station.color,
+                        size: 22,
+                      ),
+                    ),
+                  ),
+                )
+              : Icon(genreIcon(station.genre), color: Colors.white, size: 22),
         ),
-        child: playing
-            ? const Equalizer(active: true, size: 18)
-            : station.frequency != null
-            ? Text(
-                station.frequency!,
-                style: const TextStyle(
-                  fontWeight: FontWeight.w800,
-                  fontSize: 13,
-                  color: Colors.white,
-                ),
-              )
-            : Icon(genreIcon(station.genre), color: Colors.white, size: 22),
-      ),
-      title: Text(
-        station.name,
-        style: const TextStyle(fontWeight: FontWeight.w700),
-      ),
-      subtitle: Text(
-        '${genreLabel(context.l10n, station.genre)} · '
-        '${station.tagline.of(context.languageCode)}',
-        maxLines: 1,
-        overflow: TextOverflow.ellipsis,
-        style: const TextStyle(color: AppTheme.textSecondary),
-      ),
-      trailing: IconButton(
-        tooltip: favorite
-            ? context.l10n.removeFavorite
-            : context.l10n.addFavorite,
-        onPressed: onFavorite,
-        icon: Icon(
-          favorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
-          color: favorite ? const Color(0xFFF472B6) : AppTheme.textSecondary,
+        title: Text(
+          station.name,
+          style: const TextStyle(fontWeight: FontWeight.w700),
+        ),
+        subtitle: Text(
+          available
+              ? '${genreLabel(context.l10n, station.genre)} · '
+                    '${station.tagline.of(context.languageCode)}'
+              : context.l10n.unavailableHere,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          style: const TextStyle(color: AppTheme.textSecondary),
+        ),
+        trailing: IconButton(
+          tooltip: favorite
+              ? context.l10n.removeFavorite
+              : context.l10n.addFavorite,
+          onPressed: onFavorite,
+          icon: Icon(
+            favorite ? Icons.favorite_rounded : Icons.favorite_border_rounded,
+            color: favorite ? const Color(0xFFF472B6) : AppTheme.textSecondary,
+          ),
         ),
       ),
     );

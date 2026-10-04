@@ -177,7 +177,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get voiceExamples =>
-      'Play jazz|Next station|Play 96.2|Play Radio Paradise|Add to favourites|Stop';
+      'Play jazz|Next station|Play 92.8|Play Radio Paradise|Add to favourites|Stop';
 
   @override
   String replyPlaying(String station) {
@@ -212,4 +212,79 @@ class AppLocalizationsEn extends AppLocalizations {
   String replyUnknown(String phrase) {
     return 'Unknown command: “$phrase”';
   }
+
+  @override
+  String get scopeTitle => 'Show stations';
+
+  @override
+  String get scopeAll => 'All stations';
+
+  @override
+  String get scopeFeatured => 'Featured';
+
+  @override
+  String get scopeBelarus => 'Belarus';
+
+  @override
+  String get scopeRussia => 'Russia';
+
+  @override
+  String get scopeRussian => 'In Russian';
+
+  @override
+  String get scopeBelarusian => 'In Belarusian';
+
+  @override
+  String get scopeEnglish => 'In English';
+
+  @override
+  String get hideUnavailable => 'Only stations available here';
+
+  @override
+  String get hideUnavailableHint =>
+      'Streams are checked from your network: some stations work only in Belarus, others only abroad.';
+
+  @override
+  String get unavailableHere => 'Unavailable in your network';
+
+  @override
+  String get checkingStreams => 'Checking streams…';
+
+  @override
+  String get catalogUpdating => 'Updating the station catalogue…';
+
+  @override
+  String get catalogFailed =>
+      'The online catalogue is unavailable, showing saved stations.';
+
+  @override
+  String get retry => 'Retry';
+
+  @override
+  String get catalogSource =>
+      'Online stations come from Radio Browser, a public directory that checks streams every day.';
+
+  @override
+  String get noStationsTitle => 'No stations here';
+
+  @override
+  String get noStationsHint => 'Pick another genre or show all stations.';
+
+  @override
+  String get genreNews => 'News';
+
+  @override
+  String get genreClassical => 'Classical';
+
+  @override
+  String get genreElectronic => 'Electronic';
+
+  @override
+  String get genreHiphop => 'Hip-hop';
+
+  @override
+  String get genreChanson => 'Chanson';
+
+  @override
+  String get genreOther => 'Other';
 }

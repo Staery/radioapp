@@ -16,6 +16,7 @@ class StationCard extends StatelessWidget {
     required this.isPlaying,
     required this.onTap,
     required this.onFavorite,
+    this.available = true,
   });
 
   final Station station;
@@ -23,6 +24,9 @@ class StationCard extends StatelessWidget {
   final bool isPlaying;
   final VoidCallback onTap;
   final VoidCallback onFavorite;
+
+  /// False when the stream did not open from this network.
+  final bool available;
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +67,13 @@ class StationCard extends StatelessWidget {
                             label: genreLabel(l10n, station.genre),
                           ),
                           const SizedBox(width: 8),
-                          _Pill(label: station.language.toUpperCase()),
+                          _Pill(
+                            label: {
+                              ?station.countryCode,
+                              if (station.language.isNotEmpty)
+                                station.language.toUpperCase(),
+                            }.join(' · '),
+                          ),
                           const Spacer(),
                           IconButton(
                             tooltip: isFavorite
@@ -127,7 +137,13 @@ class StationCard extends StatelessWidget {
                           color: Colors.white.withValues(alpha: 0.85),
                         ),
                       ),
-                      if (station.location != null) ...[
+                      if (!available) ...[
+                        const SizedBox(height: 10),
+                        _Pill(
+                          icon: Icons.block_rounded,
+                          label: l10n.unavailableHere,
+                        ),
+                      ] else if (station.location != null) ...[
                         const SizedBox(height: 10),
                         Row(
                           children: [
@@ -198,6 +214,24 @@ class _Dial extends StatelessWidget {
         ],
       );
     }
+    final logo = station.logoUrl;
+    if (logo != null) {
+      return ClipRRect(
+        borderRadius: BorderRadius.circular(22),
+        child: Container(
+          width: 96,
+          height: 96,
+          color: Colors.white,
+          padding: const EdgeInsets.all(8),
+          child: Image.network(
+            logo,
+            fit: BoxFit.contain,
+            errorBuilder: (_, _, _) =>
+                Icon(genreIcon(station.genre), size: 48, color: station.color),
+          ),
+        ),
+      );
+    }
     return Row(
       children: [
         Icon(
@@ -241,13 +275,17 @@ class _Pill extends StatelessWidget {
             Icon(icon, size: 14, color: Colors.white),
             const SizedBox(width: 5),
           ],
-          Text(
-            label,
-            style: const TextStyle(
-              fontSize: 12,
-              fontWeight: FontWeight.w700,
-              color: Colors.white,
-              letterSpacing: 0.3,
+          Flexible(
+            child: Text(
+              label,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
+                letterSpacing: 0.3,
+              ),
             ),
           ),
         ],

@@ -180,7 +180,7 @@ class AppLocalizationsBe extends AppLocalizations {
 
   @override
   String get voiceExamples =>
-      'Уключы джаз|Наступная|Уключы 96,2|Уключы Radio Paradise|Дадай у абранае|Стоп';
+      'Уключы джаз|Наступная|Уключы 92,8|Уключы Radio Paradise|Дадай у абранае|Стоп';
 
   @override
   String replyPlaying(String station) {
@@ -215,4 +215,79 @@ class AppLocalizationsBe extends AppLocalizations {
   String replyUnknown(String phrase) {
     return 'Невядомая каманда: «$phrase»';
   }
+
+  @override
+  String get scopeTitle => 'Якія станцыі паказваць';
+
+  @override
+  String get scopeAll => 'Усе станцыі';
+
+  @override
+  String get scopeFeatured => 'Падборка';
+
+  @override
+  String get scopeBelarus => 'Беларусь';
+
+  @override
+  String get scopeRussia => 'Расія';
+
+  @override
+  String get scopeRussian => 'На рускай';
+
+  @override
+  String get scopeBelarusian => 'На беларускай';
+
+  @override
+  String get scopeEnglish => 'На англійскай';
+
+  @override
+  String get hideUnavailable => 'Толькі даступныя адсюль';
+
+  @override
+  String get hideUnavailableHint =>
+      'Патокі правяраюцца з вашай сеткі: адны станцыі працуюць толькі ў Беларусі, іншыя толькі за мяжой.';
+
+  @override
+  String get unavailableHere => 'Недаступна ў вашай сетцы';
+
+  @override
+  String get checkingStreams => 'Правяраю патокі…';
+
+  @override
+  String get catalogUpdating => 'Абнаўляю каталог станцый…';
+
+  @override
+  String get catalogFailed =>
+      'Анлайн-каталог недаступны, паказаны захаваныя станцыі.';
+
+  @override
+  String get retry => 'Паўтарыць';
+
+  @override
+  String get catalogSource =>
+      'Анлайн-станцыі бяруцца з Radio Browser — адкрытага каталога, які штодня правярае патокі.';
+
+  @override
+  String get noStationsTitle => 'Тут няма станцый';
+
+  @override
+  String get noStationsHint => 'Выберыце іншы жанр або пакажыце ўсе станцыі.';
+
+  @override
+  String get genreNews => 'Навіны';
+
+  @override
+  String get genreClassical => 'Класіка';
+
+  @override
+  String get genreElectronic => 'Электроніка';
+
+  @override
+  String get genreHiphop => 'Хіп-хоп';
+
+  @override
+  String get genreChanson => 'Шансон';
+
+  @override
+  String get genreOther => 'Рознае';
 }

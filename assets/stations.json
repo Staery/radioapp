@@ -22,7 +22,8 @@
       "genre": "humor",
       "language": "ru",
       "color": "0xFFE11D48",
-      "streamUrl": "http://live.humorfm.by:8000/veseloeradio"
+      "streamUrl": "http://live.humorfm.by:8000/veseloeradio",
+      "country": "BY"
     },
     {
       "id": "legendy-fm",
@@ -46,31 +47,8 @@
       "genre": "retro",
       "language": "ru",
       "color": "0xFFF59E0B",
-      "streamUrl": "http://live.legendy.by:8000/legendyfm"
-    },
-    {
-      "id": "melodii-veka",
-      "name": "Melodii Veka",
-      "frequency": "96.2",
-      "location": {
-        "en": "Minsk",
-        "ru": "Минск",
-        "be": "Мінск"
-      },
-      "tagline": {
-        "en": "Songs of the century",
-        "ru": "Песни века",
-        "be": "Песні стагоддзя"
-      },
-      "description": {
-        "en": "Melodies of the 20th century: Soviet estrada, chanson and the best songs that are still sung today.",
-        "ru": "Мелодии XX века: советская эстрада, шансон и лучшие песни, которые поют до сих пор.",
-        "be": "Мелодыі XX стагоддзя: савецкая эстрада, шансон і лепшыя песні, якія спяваюць дагэтуль."
-      },
-      "genre": "retro",
-      "language": "ru",
-      "color": "0xFF8B5CF6",
-      "streamUrl": "https://air.melodiiveka.by:8443/mv"
+      "streamUrl": "http://live.legendy.by:8000/legendyfm",
+      "country": "BY"
     },
     {
       "id": "kexp",
@@ -94,7 +72,8 @@
       "genre": "indie",
       "language": "en",
       "color": "0xFF0EA5E9",
-      "streamUrl": "https://kexp-mp3-128.streamguys1.com/kexp128.mp3"
+      "streamUrl": "https://kexp-mp3-128.streamguys1.com/kexp128.mp3",
+      "country": "US"
     },
     {
       "id": "radio-paradise",
@@ -118,7 +97,8 @@
       "genre": "rock",
       "language": "en",
       "color": "0xFF10B981",
-      "streamUrl": "https://stream.radioparadise.com/mp3-128"
+      "streamUrl": "https://stream.radioparadise.com/mp3-128",
+      "country": "US"
     },
     {
       "id": "jazz24",
@@ -142,7 +122,8 @@
       "genre": "jazz",
       "language": "en",
       "color": "0xFFF97316",
-      "streamUrl": "https://live.wostreaming.net/direct/ppm-jazz24mp3-ibc1"
+      "streamUrl": "https://live.wostreaming.net/direct/ppm-jazz24mp3-ibc1",
+      "country": "US"
     },
     {
       "id": "groove-salad",
@@ -166,7 +147,8 @@
       "genre": "chill",
       "language": "en",
       "color": "0xFF22C55E",
-      "streamUrl": "https://ice1.somafm.com/groovesalad-128-mp3"
+      "streamUrl": "https://ice1.somafm.com/groovesalad-128-mp3",
+      "country": "US"
     },
     {
       "id": "indie-pop-rocks",
@@ -190,7 +172,433 @@
       "genre": "pop",
       "language": "en",
       "color": "0xFFEC4899",
-      "streamUrl": "https://ice1.somafm.com/indiepop-128-mp3"
+      "streamUrl": "https://ice1.somafm.com/indiepop-128-mp3",
+      "country": "US"
+    },
+    {
+      "id": "radio-record",
+      "name": "Radio Record",
+      "frequency": null,
+      "location": {
+        "en": "Saint Petersburg",
+        "ru": "Санкт-Петербург",
+        "be": "Санкт-Пецярбург"
+      },
+      "tagline": {
+        "en": "Dance music non-stop",
+        "ru": "Танцевальная музыка без остановки",
+        "be": "Танцавальная музыка без перапынку"
+      },
+      "description": {
+        "en": "The biggest Russian dance station: house, trance, EDM and the Record Megamix.",
+        "ru": "Главная танцевальная станция России: хаус, транс, EDM и «Рекорд Мегамикс».",
+        "be": "Галоўная танцавальная станцыя Расіі: хаўс, транс, EDM і «Рэкорд Мегамікс»."
+      },
+      "genre": "electronic",
+      "language": "ru",
+      "country": "RU",
+      "color": "0xFFF97316",
+      "streamUrl": "https://radiorecord.hostingradio.ru/rr_main96.aacp"
+    },
+    {
+      "id": "record-chill",
+      "name": "Record Chill-Out",
+      "frequency": null,
+      "location": {
+        "en": "Saint Petersburg",
+        "ru": "Санкт-Петербург",
+        "be": "Санкт-Пецярбург"
+      },
+      "tagline": {
+        "en": "Lounge and chill-out",
+        "ru": "Лаунж и чилаут",
+        "be": "Лаўндж і чылаўт"
+      },
+      "description": {
+        "en": "A calm channel of Radio Record with lounge, downtempo and chill-out.",
+        "ru": "Спокойный канал Радио Рекорд: лаунж, даунтемпо и чилаут.",
+        "be": "Спакойны канал Радыё Рэкорд: лаўндж, даўнтэмпа і чылаўт."
+      },
+      "genre": "chill",
+      "language": "ru",
+      "country": "RU",
+      "color": "0xFF14B8A6",
+      "streamUrl": "https://radiorecord.hostingradio.ru/chil96.aacp"
+    },
+    {
+      "id": "europa-plus",
+      "name": "Europa Plus",
+      "frequency": "106.2",
+      "location": {
+        "en": "Moscow",
+        "ru": "Москва",
+        "be": "Масква"
+      },
+      "tagline": {
+        "en": "Hits only",
+        "ru": "Только хиты",
+        "be": "Толькі хіты"
+      },
+      "description": {
+        "en": "One of the most popular Russian stations: current pop hits from Russia and the world.",
+        "ru": "Одна из самых популярных станций России: актуальные поп-хиты России и мира.",
+        "be": "Адна з самых папулярных станцый Расіі: актуальныя поп-хіты Расіі і свету."
+      },
+      "genre": "pop",
+      "language": "ru",
+      "country": "RU",
+      "color": "0xFF2563EB",
+      "streamUrl": "https://ep256.hostingradio.ru:8052/europaplus256.mp3"
+    },
+    {
+      "id": "retro-fm",
+      "name": "Retro FM",
+      "frequency": "88.3",
+      "location": {
+        "en": "Moscow",
+        "ru": "Москва",
+        "be": "Масква"
+      },
+      "tagline": {
+        "en": "The best music of the 70s, 80s and 90s",
+        "ru": "Лучшая музыка 70-х, 80-х и 90-х",
+        "be": "Лепшая музыка 70-х, 80-х і 90-х"
+      },
+      "description": {
+        "en": "Disco, pop and dance hits from three decades, Russian and international.",
+        "ru": "Диско, поп и танцевальные хиты трёх десятилетий, русские и зарубежные.",
+        "be": "Дыска, поп і танцавальныя хіты трох дзесяцігоддзяў, рускія і замежныя."
+      },
+      "genre": "retro",
+      "language": "ru",
+      "country": "RU",
+      "color": "0xFFDB2777",
+      "streamUrl": "https://retro.hostingradio.ru:8043/retro256.mp3"
+    },
+    {
+      "id": "nashe-radio",
+      "name": "NASHE Radio",
+      "frequency": "101.7",
+      "location": {
+        "en": "Moscow",
+        "ru": "Москва",
+        "be": "Масква"
+      },
+      "tagline": {
+        "en": "Russian rock",
+        "ru": "Русский рок",
+        "be": "Рускі рок"
+      },
+      "description": {
+        "en": "The home of Russian rock: classics and new bands, the station behind the Nashestvie festival.",
+        "ru": "Дом русского рока: классика и новые группы, станция фестиваля «Нашествие».",
+        "be": "Дом рускага року: класіка і новыя гурты, станцыя фестывалю «Нашэсце»."
+      },
+      "genre": "rock",
+      "language": "ru",
+      "country": "RU",
+      "color": "0xFFDC2626",
+      "streamUrl": "https://nashe1.hostingradio.ru/nashe-128.mp3"
+    },
+    {
+      "id": "radio-jazz",
+      "name": "Radio JAZZ",
+      "frequency": "89.1",
+      "location": {
+        "en": "Moscow",
+        "ru": "Москва",
+        "be": "Масква"
+      },
+      "tagline": {
+        "en": "Jazz, soul and blues",
+        "ru": "Джаз, соул и блюз",
+        "be": "Джаз, соўл і блюз"
+      },
+      "description": {
+        "en": "Moscow jazz station: standards, smooth jazz, soul and blues.",
+        "ru": "Московская джазовая станция: стандарты, смус-джаз, соул и блюз.",
+        "be": "Маскоўская джазавая станцыя: стандарты, смус-джаз, соўл і блюз."
+      },
+      "genre": "jazz",
+      "language": "ru",
+      "country": "RU",
+      "color": "0xFFB45309",
+      "streamUrl": "https://nashe1.hostingradio.ru/jazz-128.mp3"
+    },
+    {
+      "id": "bbc-world-service",
+      "name": "BBC World Service",
+      "frequency": null,
+      "location": {
+        "en": "London",
+        "ru": "Лондон",
+        "be": "Лондан"
+      },
+      "tagline": {
+        "en": "News from around the world",
+        "ru": "Новости со всего мира",
+        "be": "Навіны з усяго свету"
+      },
+      "description": {
+        "en": "International news, analysis and documentaries from the BBC, around the clock.",
+        "ru": "Международные новости, аналитика и документальные программы BBC круглые сутки.",
+        "be": "Міжнародныя навіны, аналітыка і дакументальныя праграмы BBC кругласутачна."
+      },
+      "genre": "news",
+      "language": "en",
+      "country": "GB",
+      "color": "0xFFB91C1C",
+      "streamUrl": "https://stream.live.vc.bbcmedia.co.uk/bbc_world_service"
+    },
+    {
+      "id": "fip",
+      "name": "FIP",
+      "frequency": null,
+      "location": {
+        "en": "Paris",
+        "ru": "Париж",
+        "be": "Парыж"
+      },
+      "tagline": {
+        "en": "Eclectic music from Paris",
+        "ru": "Эклектичная музыка из Парижа",
+        "be": "Эклектычная музыка з Парыжа"
+      },
+      "description": {
+        "en": "Radio France station famous for seamless mixes of jazz, rock, world, electronic and chanson.",
+        "ru": "Станция Radio France, известная плавными миксами джаза, рока, world music, электроники и шансона.",
+        "be": "Станцыя Radio France, вядомая плаўнымі міксамі джаза, року, world music, электронікі і шансону."
+      },
+      "genre": "pop",
+      "language": "fr",
+      "country": "FR",
+      "color": "0xFFE11D74",
+      "streamUrl": "https://icecast.radiofrance.fr/fip-midfi.mp3"
+    },
+    {
+      "id": "fip-jazz",
+      "name": "FIP Jazz",
+      "frequency": null,
+      "location": {
+        "en": "Paris",
+        "ru": "Париж",
+        "be": "Парыж"
+      },
+      "tagline": {
+        "en": "Jazz by FIP",
+        "ru": "Джаз от FIP",
+        "be": "Джаз ад FIP"
+      },
+      "description": {
+        "en": "A jazz channel of FIP: from bebop to contemporary jazz.",
+        "ru": "Джазовый канал FIP: от бибопа до современного джаза.",
+        "be": "Джазавы канал FIP: ад бібопа да сучаснага джаза."
+      },
+      "genre": "jazz",
+      "language": "fr",
+      "country": "FR",
+      "color": "0xFF7C3AED",
+      "streamUrl": "https://icecast.radiofrance.fr/fipjazz-midfi.mp3"
+    },
+    {
+      "id": "swiss-jazz",
+      "name": "Radio Swiss Jazz",
+      "frequency": null,
+      "location": {
+        "en": "Switzerland",
+        "ru": "Швейцария",
+        "be": "Швейцарыя"
+      },
+      "tagline": {
+        "en": "Jazz, soul and blues without ads",
+        "ru": "Джаз, соул и блюз без рекламы",
+        "be": "Джаз, соўл і блюз без рэкламы"
+      },
+      "description": {
+        "en": "Swiss public radio channel with jazz, soul and blues and almost no talk.",
+        "ru": "Канал швейцарского общественного радио: джаз, соул и блюз почти без разговоров.",
+        "be": "Канал швейцарскага грамадскага радыё: джаз, соўл і блюз амаль без размоў."
+      },
+      "genre": "jazz",
+      "language": "de",
+      "country": "CH",
+      "color": "0xFF0891B2",
+      "streamUrl": "https://stream.srg-ssr.ch/m/rsj/mp3_128"
+    },
+    {
+      "id": "swiss-classic",
+      "name": "Radio Swiss Classic",
+      "frequency": null,
+      "location": {
+        "en": "Switzerland",
+        "ru": "Швейцария",
+        "be": "Швейцарыя"
+      },
+      "tagline": {
+        "en": "Classical music",
+        "ru": "Классическая музыка",
+        "be": "Класічная музыка"
+      },
+      "description": {
+        "en": "Classical music from the Baroque to the 20th century, without ads.",
+        "ru": "Классическая музыка от барокко до XX века без рекламы.",
+        "be": "Класічная музыка ад барока да XX стагоддзя без рэкламы."
+      },
+      "genre": "classical",
+      "language": "de",
+      "country": "CH",
+      "color": "0xFF9333EA",
+      "streamUrl": "https://stream.srg-ssr.ch/m/rsc_de/mp3_128"
+    },
+    {
+      "id": "radio-paradise-mellow",
+      "name": "Radio Paradise Mellow",
+      "frequency": null,
+      "location": {
+        "en": "California",
+        "ru": "Калифорния",
+        "be": "Каліфорнія"
+      },
+      "tagline": {
+        "en": "The calm side of Radio Paradise",
+        "ru": "Спокойный Radio Paradise",
+        "be": "Спакойны Radio Paradise"
+      },
+      "description": {
+        "en": "A mellower mix from Radio Paradise: acoustic, folk, soft rock and world.",
+        "ru": "Более спокойный микс Radio Paradise: акустика, фолк, софт-рок и world music.",
+        "be": "Больш спакойны мікс Radio Paradise: акустыка, фолк, софт-рок і world music."
+      },
+      "genre": "chill",
+      "language": "en",
+      "country": "US",
+      "color": "0xFF059669",
+      "streamUrl": "https://stream.radioparadise.com/mellow-128"
+    },
+    {
+      "id": "radio-paradise-rock",
+      "name": "Radio Paradise Rock",
+      "frequency": null,
+      "location": {
+        "en": "California",
+        "ru": "Калифорния",
+        "be": "Каліфорнія"
+      },
+      "tagline": {
+        "en": "Rock, hand-picked",
+        "ru": "Рок, подобранный вручную",
+        "be": "Рок, падабраны ўручную"
+      },
+      "description": {
+        "en": "The rock channel of Radio Paradise: classic and modern rock chosen by people.",
+        "ru": "Рок-канал Radio Paradise: классический и современный рок, который подбирают люди.",
+        "be": "Рок-канал Radio Paradise: класічны і сучасны рок, які падбіраюць людзі."
+      },
+      "genre": "rock",
+      "language": "en",
+      "country": "US",
+      "color": "0xFF65A30D",
+      "streamUrl": "https://stream.radioparadise.com/rock-128"
+    },
+    {
+      "id": "drone-zone",
+      "name": "Drone Zone",
+      "frequency": null,
+      "location": {
+        "en": "SomaFM, San Francisco",
+        "ru": "SomaFM, Сан-Франциско",
+        "be": "SomaFM, Сан-Францыска"
+      },
+      "tagline": {
+        "en": "Atmospheric ambient",
+        "ru": "Атмосферный эмбиент",
+        "be": "Атмасферны эмбіент"
+      },
+      "description": {
+        "en": "Atmospheric textures with almost no beat, for sleep, work and quiet.",
+        "ru": "Атмосферный эмбиент почти без ритма — для сна, работы и тишины.",
+        "be": "Атмасферны эмбіент амаль без рытму — для сну, працы і цішыні."
+      },
+      "genre": "chill",
+      "language": "en",
+      "country": "US",
+      "color": "0xFF0F766E",
+      "streamUrl": "https://ice1.somafm.com/dronezone-128-mp3"
+    },
+    {
+      "id": "secret-agent",
+      "name": "Secret Agent",
+      "frequency": null,
+      "location": {
+        "en": "SomaFM, San Francisco",
+        "ru": "SomaFM, Сан-Франциско",
+        "be": "SomaFM, Сан-Францыска"
+      },
+      "tagline": {
+        "en": "Lounge for spies",
+        "ru": "Лаунж для шпионов",
+        "be": "Лаўндж для шпіёнаў"
+      },
+      "description": {
+        "en": "The soundtrack for your stylish, mysterious, dangerous life: spy-movie lounge and downtempo.",
+        "ru": "Саундтрек для стильной и опасной жизни: шпионский лаунж и даунтемпо.",
+        "be": "Саўндтрэк для стыльнага і небяспечнага жыцця: шпіёнскі лаўндж і даўнтэмпа."
+      },
+      "genre": "chill",
+      "language": "en",
+      "country": "US",
+      "color": "0xFF334155",
+      "streamUrl": "https://ice1.somafm.com/secretagent-128-mp3"
+    },
+    {
+      "id": "underground-80s",
+      "name": "Underground 80s",
+      "frequency": null,
+      "location": {
+        "en": "SomaFM, San Francisco",
+        "ru": "SomaFM, Сан-Франциско",
+        "be": "SomaFM, Сан-Францыска"
+      },
+      "tagline": {
+        "en": "Early 80s new wave",
+        "ru": "Нью-вейв начала 80-х",
+        "be": "Нью-вэйў пачатку 80-х"
+      },
+      "description": {
+        "en": "Early 80s UK synthpop and a bit of new wave.",
+        "ru": "Британский синтипоп и нью-вейв начала 80-х.",
+        "be": "Брытанскі сінтыпоп і нью-вэйў пачатку 80-х."
+      },
+      "genre": "retro",
+      "language": "en",
+      "country": "US",
+      "color": "0xFFC026D3",
+      "streamUrl": "https://ice1.somafm.com/u80s-128-mp3"
+    },
+    {
+      "id": "defcon",
+      "name": "DEF CON Radio",
+      "frequency": null,
+      "location": {
+        "en": "SomaFM, San Francisco",
+        "ru": "SomaFM, Сан-Франциско",
+        "be": "SomaFM, Сан-Францыска"
+      },
+      "tagline": {
+        "en": "Music for hacking",
+        "ru": "Музыка для хакеров",
+        "be": "Музыка для хакераў"
+      },
+      "description": {
+        "en": "Electronic music for hacking from the DEF CON conference crew.",
+        "ru": "Электроника для работы от команды конференции DEF CON.",
+        "be": "Электроніка для працы ад каманды канферэнцыі DEF CON."
+      },
+      "genre": "electronic",
+      "language": "en",
+      "country": "US",
+      "color": "0xFF16A34A",
+      "streamUrl": "https://ice1.somafm.com/defcon-128-mp3"
     }
   ]
 }

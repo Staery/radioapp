@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 
 import '../l10n/app_localizations.dart';
+import '../models/station_scope.dart';
 import '../state/radio_controller.dart';
 
 extension LocalizationContext on BuildContext {
@@ -19,6 +20,12 @@ String genreLabel(AppLocalizations l10n, String genre) => switch (genre) {
   'humor' => l10n.genreHumor,
   'indie' => l10n.genreIndie,
   'chill' => l10n.genreChill,
+  'news' => l10n.genreNews,
+  'classical' => l10n.genreClassical,
+  'electronic' => l10n.genreElectronic,
+  'hiphop' => l10n.genreHiphop,
+  'chanson' => l10n.genreChanson,
+  'other' => l10n.genreOther,
   _ => genre.isEmpty ? genre : genre[0].toUpperCase() + genre.substring(1),
 };
 
@@ -39,3 +46,15 @@ String voiceReplyText(AppLocalizations l10n, VoiceReply reply) {
     VoiceReplyKind.unknown => l10n.replyUnknown(reply.phrase ?? ''),
   };
 }
+
+/// Localized name of a station scope.
+String scopeLabel(AppLocalizations l10n, StationScope scope) =>
+    switch (scope.key) {
+      'featured' => l10n.scopeFeatured,
+      'country:BY' => l10n.scopeBelarus,
+      'country:RU' => l10n.scopeRussia,
+      'language:ru' => l10n.scopeRussian,
+      'language:be' => l10n.scopeBelarusian,
+      'language:en' => l10n.scopeEnglish,
+      _ => l10n.scopeAll,
+    };

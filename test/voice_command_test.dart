@@ -71,28 +71,30 @@ void main() {
       expect(genre('уключы рэтра'), 'retro');
       expect(genre('хачу нешта спакойнае'), 'chill');
       expect(genre('ўключы гумар'), 'humor');
-      expect(stationId('уключы 96 і 2'), 'melodii-veka');
+      expect(stationId('уключы 94 і 1'), 'legendy-fm');
       expect(stationId('уключы 92 кропка 8'), 'humor-fm');
-      expect(stationId('уключы мелодыі стагоддзя'), 'melodii-veka');
+      expect(stationId('уключы наша радыё'), 'nashe-radio');
     });
   });
 
   group('stations', () {
     test('by frequency', () {
-      expect(stationId('play 96.2'), 'melodii-veka');
-      expect(stationId('включи 96,2'), 'melodii-veka');
+      expect(stationId('play 88.3'), 'retro-fm');
+      expect(stationId('включи 106,2'), 'europa-plus');
       expect(stationId('play 92 point 8'), 'humor-fm');
       expect(stationId('включи 94 и 1'), 'legendy-fm');
       expect(stationId('play 90.3'), 'kexp');
     });
 
     test('by whole-number frequency when it is unambiguous', () {
-      expect(stationId('play 96'), 'melodii-veka');
+      expect(stationId('play 94'), 'legendy-fm');
     });
 
     test('by name and alias', () {
       expect(stationId('play Radio Paradise'), 'radio-paradise');
-      expect(stationId('включи мелодии века'), 'melodii-veka');
+      expect(stationId('включи наше радио'), 'nashe-radio');
+      expect(stationId('play BBC'), 'bbc-world-service');
+      expect(stationId('включи радио рекорд'), 'radio-record');
       expect(stationId('Play KEXP'), 'kexp');
       expect(stationId('play jazz 24'), 'jazz24');
       expect(stationId('play groove salad'), 'groove-salad');

@@ -373,7 +373,7 @@ abstract class AppLocalizations {
   /// No description provided for @voiceExamples.
   ///
   /// In en, this message translates to:
-  /// **'Play jazz|Next station|Play 96.2|Play Radio Paradise|Add to favourites|Stop'**
+  /// **'Play jazz|Next station|Play 92.8|Play Radio Paradise|Add to favourites|Stop'**
   String get voiceExamples;
 
   /// No description provided for @replyPlaying.
@@ -423,6 +423,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Unknown command: “{phrase}”'**
   String replyUnknown(String phrase);
+
+  /// No description provided for @scopeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Show stations'**
+  String get scopeTitle;
+
+  /// No description provided for @scopeAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All stations'**
+  String get scopeAll;
+
+  /// No description provided for @scopeFeatured.
+  ///
+  /// In en, this message translates to:
+  /// **'Featured'**
+  String get scopeFeatured;
+
+  /// No description provided for @scopeBelarus.
+  ///
+  /// In en, this message translates to:
+  /// **'Belarus'**
+  String get scopeBelarus;
+
+  /// No description provided for @scopeRussia.
+  ///
+  /// In en, this message translates to:
+  /// **'Russia'**
+  String get scopeRussia;
+
+  /// No description provided for @scopeRussian.
+  ///
+  /// In en, this message translates to:
+  /// **'In Russian'**
+  String get scopeRussian;
+
+  /// No description provided for @scopeBelarusian.
+  ///
+  /// In en, this message translates to:
+  /// **'In Belarusian'**
+  String get scopeBelarusian;
+
+  /// No description provided for @scopeEnglish.
+  ///
+  /// In en, this message translates to:
+  /// **'In English'**
+  String get scopeEnglish;
+
+  /// No description provided for @hideUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Only stations available here'**
+  String get hideUnavailable;
+
+  /// No description provided for @hideUnavailableHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Streams are checked from your network: some stations work only in Belarus, others only abroad.'**
+  String get hideUnavailableHint;
+
+  /// No description provided for @unavailableHere.
+  ///
+  /// In en, this message translates to:
+  /// **'Unavailable in your network'**
+  String get unavailableHere;
+
+  /// No description provided for @checkingStreams.
+  ///
+  /// In en, this message translates to:
+  /// **'Checking streams…'**
+  String get checkingStreams;
+
+  /// No description provided for @catalogUpdating.
+  ///
+  /// In en, this message translates to:
+  /// **'Updating the station catalogue…'**
+  String get catalogUpdating;
+
+  /// No description provided for @catalogFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'The online catalogue is unavailable, showing saved stations.'**
+  String get catalogFailed;
+
+  /// No description provided for @retry.
+  ///
+  /// In en, this message translates to:
+  /// **'Retry'**
+  String get retry;
+
+  /// No description provided for @catalogSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Online stations come from Radio Browser, a public directory that checks streams every day.'**
+  String get catalogSource;
+
+  /// No description provided for @noStationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'No stations here'**
+  String get noStationsTitle;
+
+  /// No description provided for @noStationsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Pick another genre or show all stations.'**
+  String get noStationsHint;
+
+  /// No description provided for @genreNews.
+  ///
+  /// In en, this message translates to:
+  /// **'News'**
+  String get genreNews;
+
+  /// No description provided for @genreClassical.
+  ///
+  /// In en, this message translates to:
+  /// **'Classical'**
+  String get genreClassical;
+
+  /// No description provided for @genreElectronic.
+  ///
+  /// In en, this message translates to:
+  /// **'Electronic'**
+  String get genreElectronic;
+
+  /// No description provided for @genreHiphop.
+  ///
+  /// In en, this message translates to:
+  /// **'Hip-hop'**
+  String get genreHiphop;
+
+  /// No description provided for @genreChanson.
+  ///
+  /// In en, this message translates to:
+  /// **'Chanson'**
+  String get genreChanson;
+
+  /// No description provided for @genreOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get genreOther;
 }
 
 class _AppLocalizationsDelegate
